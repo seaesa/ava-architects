@@ -1,0 +1,234 @@
+/* ==========================================================================
+   AVA Architects — 05. Slider
+   Markup-compatible with the original (Flickity class names) but driven by
+   our own implementation in assets/js/main.js.
+   ========================================================================== */
+
+.slider-wrapper { position: relative; }
+
+/* Before JS boots, the track is a plain horizontal scroller so content is
+   visible and usable without script. */
+.slider:not(.flickity-enabled) {
+  width: auto;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.slider:not(.flickity-enabled)::-webkit-scrollbar { height: 0; }
+.slider:not(.flickity-enabled) > * {
+  display: inline-block !important;
+  vertical-align: top;
+  white-space: normal !important;
+}
+.row.row-slider:not(.flickity-enabled) { display: block; }
+.slider-load-first:not(.flickity-enabled) { max-height: 500px; }
+
+.flickity-enabled { position: relative; display: block; }
+.flickity-enabled:focus { outline: none; }
+
+/* Our track is a flex row in normal flow — Flickity absolutely positions each
+   cell instead, but a flex row gives the same result with far less bookkeeping
+   and lets cells keep their natural or percentage widths. */
+.flickity-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.flickity-slider {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  width: 100%;
+  will-change: transform;
+}
+.flickity-slider > * { flex-shrink: 0; }
+
+.flickity-enabled.is-draggable {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.flickity-enabled.is-draggable .flickity-viewport { cursor: grab; }
+.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down { cursor: grabbing; }
+.is-dragging .flickity-viewport .flickity-slider { pointer-events: none; }
+
+.flickity-slider > a,
+.flickity-slider > a > img,
+.flickity-slider > div:not(.col),
+.flickity-slider > figure,
+.flickity-slider > img,
+.flickity-slider > p {
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+  transition: transform .6s, opacity .6s, box-shadow .6s;
+}
+.flickity-slider > .img { margin-bottom: 0; }
+.slider-full .flickity-slider > .col { padding: 0 !important; }
+
+/* Fade type: slides stack and cross-fade instead of sliding. */
+.slider-type-fade .flickity-slider { display: block; }
+.slider-type-fade .flickity-slider > * { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .6s; }
+.slider-type-fade .flickity-slider > .is-selected { opacity: 1; z-index: 2; }
+.slider-type-fade .flickity-page-dots,
+.slider-type-fade .flickity-prev-next-button { z-index: 3; }
+
+/* --- Arrows --------------------------------------------------------------- */
+
+.flickity-prev-next-button {
+  position: absolute;
+  top: 40%;
+  bottom: 40%;
+  width: 36px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: #111;
+  cursor: pointer;
+  opacity: 0;
+  transition: transform .3s, opacity .3s, background .3s, box-shadow .3s;
+  z-index: 3;
+}
+.flickity-prev-next-button.previous { left: 2%; transform: translateX(20%); }
+.flickity-prev-next-button.next     { right: 2%; transform: translateX(-20%); }
+
+.slider-show-nav .flickity-prev-next-button,
+.slider:hover .flickity-prev-next-button,
+.slider-wrapper:hover .flickity-prev-next-button {
+  opacity: .7;
+  transform: translateX(0) !important;
+}
+.flickity-prev-next-button:hover { opacity: 1; box-shadow: none; }
+
+.flickity-prev-next-button svg {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  padding: 20%;
+  transform: translate(-50%, -50%);
+  transition: .3s;
+  fill: currentColor;
+}
+.flickity-prev-next-button:hover svg,
+.flickity-prev-next-button:hover .arrow { fill: var(--ava-primary); }
+
+.flickity-prev-next-button:disabled {
+  cursor: auto;
+  pointer-events: none;
+  opacity: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.slider-no-arrows .flickity-prev-next-button { display: none !important; }
+
+/* Variants */
+.slider-nav-light .flickity-prev-next-button { color: #fff; }
+.slider-nav-dark  .flickity-prev-next-button { color: #111; }
+.slider-nav-circle .flickity-prev-next-button svg { height: 36px; }
+.slider-nav-push:not(.slider-nav-reveal) .flickity-prev-next-button { margin-top: -10%; }
+
+@media (min-width: 850px) {
+  .slider-nav-outside .flickity-prev-next-button.previous { left: auto; right: 100%; }
+  .slider-nav-outside .flickity-prev-next-button.next     { left: 100%; right: auto; }
+}
+@media (max-width: 849px) {
+  .flickity-prev-next-button { width: 30px; }
+}
+
+/* --- Dots ----------------------------------------------------------------- */
+
+.flickity-page-dots {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 15px;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  list-style: none;
+  text-align: center;
+  z-index: 3;
+}
+.row-slider .flickity-page-dots { bottom: 0; }
+
+.flickity-page-dots .dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  border: 3px solid #111;
+  border-radius: 50%;
+  opacity: .4;
+  cursor: pointer;
+  transition: opacity .3s, background-color .3s;
+}
+.flickity-page-dots .dot:hover { opacity: .7; }
+.flickity-page-dots .dot.is-selected { background-color: #111; opacity: 1 !important; }
+/* A lone dot is meaningless. */
+.flickity-page-dots .dot:first-child:last-child { display: none; }
+
+.slider-nav-light .flickity-page-dots .dot { border-color: #fff; }
+.slider-nav-light .flickity-page-dots .dot.is-selected { background-color: #fff; }
+
+.nav-dots-small .flickity-page-dots .dot,
+.row-slider .flickity-page-dots .dot {
+  width: 10px; height: 10px;
+  border: 0;
+  background-color: #111;
+  opacity: .2;
+}
+.slider-nav-dots-dashes .flickity-page-dots .dot,
+.slider-nav-dots-dashes-spaced .flickity-page-dots .dot {
+  width: 40px; height: 4px;
+  border-radius: 0;
+}
+.slider-nav-dots-dashes .flickity-page-dots .dot { margin: 0; }
+.slider-nav-dots-square .flickity-page-dots .dot { border-radius: 0; }
+.slider-nav-dots-simple .flickity-page-dots .dot { background-color: #111; }
+
+/* The hero puts its dots just under the frame. */
+.slider-style-normal .flickity-page-dots { bottom: -15px; }
+
+/* --- Grid columns inside a slider ----------------------------------------- */
+
+.small-columns-1 .flickity-slider > .col { flex-basis: 100%; max-width: 100%; }
+.small-columns-2 .flickity-slider > .col { flex-basis: 50%; max-width: 50%; }
+@media screen and (min-width: 550px) {
+  .medium-columns-1 .flickity-slider > .col { flex-basis: 100%; max-width: 100%; }
+  .medium-columns-2 .flickity-slider > .col { flex-basis: 50%; max-width: 50%; }
+  .medium-columns-3 .flickity-slider > .col { flex-basis: 33.3333%; max-width: 33.3333%; }
+  .medium-columns-4 .flickity-slider > .col { flex-basis: 25%; max-width: 25%; }
+}
+@media screen and (min-width: 850px) {
+  .large-columns-1 .flickity-slider > .col { flex-basis: 100%; max-width: 100%; }
+  .large-columns-2 .flickity-slider > .col { flex-basis: 50%; max-width: 50%; }
+  .large-columns-3 .flickity-slider > .col { flex-basis: 33.3333%; max-width: 33.3333%; }
+  .large-columns-4 .flickity-slider > .col { flex-basis: 25%; max-width: 25%; }
+  .large-columns-5 .flickity-slider > .col { flex-basis: 20%; max-width: 20%; }
+  .large-columns-6 .flickity-slider > .col { flex-basis: 16.6667%; max-width: 16.6667%; }
+}
+
+/* The little thumbnail strip under a project gallery. */
+.slider-custom { padding: 0; bottom: 0; }
+.slider-custom .flickity-slider .img { max-width: 20% !important; margin: 5px; border: 2px solid #fff; }
+.slider-custom .flickity-prev-next-button { display: none !important; }
+
+/* --- “Focus” slider style -------------------------------------------------
+   Used by the testimonial carousel: the active slide is centred at full size
+   while its neighbours shrink back and dim. */
+
+.slider-style-focus { padding: 30px 0; background-color: transparent; }
+.slider-style-container .flickity-slider > *,
+.slider-style-focus .flickity-slider > *,
+.slider-style-shadow .flickity-slider > * { margin: 0 auto; max-width: 1080px; }
+.slider-style-focus .flickity-slider > * { max-width: 1050px; }
+.slider-style-container .flickity-slider > :not(.is-selected),
+.slider-style-focus .flickity-slider > :not(.is-selected),
+.slider-style-shadow .flickity-slider > :not(.is-selected) { opacity: .5; }
+.slider-style-focus .flickity-slider > :not(.is-selected) { transform: scale(.93); }
+.slider-style-focus .flickity-page-dots { bottom: 6px; }

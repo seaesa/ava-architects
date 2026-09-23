@@ -1,0 +1,103 @@
+/* ==========================================================================
+   AVA Architects — 08. Forms
+   Default field chrome plus the two Contact Form 7 layouts the site uses:
+   the flat underlined booking form and the compact footer newsletter.
+   ========================================================================== */
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="url"],
+input[type="password"], input[type="search"], input[type="number"], input[type="date"],
+select, textarea {
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+  height: 2.507em;
+  margin: 0 0 15.52px;
+  padding: 0 11.64px;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  background-color: #fff;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+  color: #333;
+  font-family: var(--ava-font);
+  font-size: .97em;
+  line-height: 1.6;
+  transition: color .3s, border .3s, background .3s, opacity .3s;
+}
+/* The shared `height` above applies to textareas too, so a `rows` attribute
+   never stretches the box; `min-height` is what actually sizes it. */
+textarea { min-height: 100px; padding-top: .7em; resize: vertical; }
+select {
+  appearance: none;
+  padding-right: 2em;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .5em center;
+  background-size: 18px;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: #999; }
+input::placeholder, textarea::placeholder { color: #999; }
+
+label { display: block; margin-bottom: .4em; font-size: .9em; }
+
+input[type="file"] { border: 0; box-shadow: none; padding-left: 0; }
+input[type="checkbox"], input[type="radio"] { width: auto; height: auto; margin-right: .4em; box-shadow: none; }
+
+/* Pill-shaped variant used inside dark panels. */
+.form-flat input:not([type="submit"]),
+.form-flat select,
+.form-flat textarea {
+  border-radius: 99px;
+  box-shadow: none;
+}
+.dark .form-flat input:not([type="submit"]),
+.dark .form-flat select,
+.dark .form-flat textarea {
+  background-color: rgba(255, 255, 255, .2) !important;
+  border-color: rgba(255, 255, 255, .09);
+  color: #fff;
+}
+.dark .form-flat input::placeholder { color: rgba(255, 255, 255, .6); }
+
+/* --- Contact Form 7 -------------------------------------------------------- */
+
+.wpcf7 form { position: relative; }
+.wpcf7-form-control-wrap { display: block; position: relative; }
+
+.wpcf7 .row > .col { padding-bottom: 0; }
+
+.wpcf7-not-valid { border-color: var(--ava-primary) !important; }
+.wpcf7-not-valid-tip {
+  display: block;
+  margin-top: -12px;
+  margin-bottom: 10px;
+  font-size: .8em;
+  color: var(--ava-primary);
+}
+.wpcf7-response-output {
+  margin: 1em 0 0;
+  padding: .6em 1em;
+  border: 2px solid var(--ava-border);
+  font-size: .9em;
+}
+.wpcf7 form.sent .wpcf7-response-output      { border-color: #46b450; }
+.wpcf7 form.invalid .wpcf7-response-output,
+.wpcf7 form.failed .wpcf7-response-output    { border-color: var(--ava-primary); }
+.wpcf7-spinner { display: none; }
+
+/* “Đặt lịch tư vấn” — underline-only fields on a light plate. */
+.sec-contact .wpcf7 input:not([type="submit"]),
+.sec-contact .wpcf7 textarea {
+  padding-left: 0;
+  border: none;
+  border-bottom: 1px solid #b1b1b1;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+.sec-contact .wpcf7 input:not([type="submit"]):focus,
+.sec-contact .wpcf7 textarea:focus { box-shadow: none; border-bottom-color: var(--ava-primary); }
+.sec-contact .wpcf7 input[type="submit"] { margin-top: 15px; }
+
+/* Footer newsletter — the submit sits on top of the field's right edge. */
+.footer-customize input { margin: 0; }
+.footer-customize input[type="submit"] { position: absolute; top: 0; right: -15px; }

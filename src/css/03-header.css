@@ -1,0 +1,575 @@
+/* ==========================================================================
+   AVA Architects — 03. Header, navigation and the off-canvas mobile menu
+   Behaviour reference: docs/research/BEHAVIORS.md
+   ========================================================================== */
+
+#header {
+  position: relative;
+  z-index: 1001;
+  transition: background-color .3s, opacity .3s;
+}
+
+.header-wrapper {
+  position: relative;
+  z-index: 1001;
+  width: 100%;
+  transition: background-color .3s, opacity .3s;
+}
+
+.header-main { position: relative; z-index: 10; }
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--ava-header-h);      /* 76px */
+}
+
+/* Background is a separate fill layer so it can cross-fade independently. */
+.header-bg-container { position: absolute; inset: 0; }
+.header-bg-color { position: absolute; inset: 0; background-color: #fff; transition: background .4s; }
+.header-bg-image { position: absolute; inset: 0; background-size: cover; transition: background .4s; }
+
+/* The hairline under the header, inset to the container width. */
+#header .top-divider {
+  height: 1px;
+  margin-bottom: -1px;
+  border-top: 1px solid var(--ava-ink);
+  opacity: .1;
+}
+#header .top-divider.full-width { width: 100%; }
+
+/* --- Sticky behaviour -----------------------------------------------------
+   Scrolling DOWN adds `.sticky-hide-on-scroll--active` to #header and the
+   wrapper stays in flow, so the bar scrolls away. Scrolling UP removes it and
+   adds `.stuck`, which pins and fades the bar back in, 4px taller.          */
+
+.header-wrapper.stuck {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, .15);
+  animation: ava-header-fade-in .3s ease both;
+}
+
+.header-wrapper.stuck .header-inner { height: var(--ava-header-h-stuck); }
+.header-wrapper.stuck .header-bg-container { height: var(--ava-header-h-stuck); }
+
+@keyframes ava-header-fade-in {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Keeps the page from jumping when the bar becomes fixed. */
+.header-height-guard { display: block; }
+
+/* --- Logo ----------------------------------------------------------------- */
+
+#logo {
+  display: block;
+  margin: 0 30px 0 0;
+  flex: 0 0 auto;
+  font-size: 32px;
+  line-height: 32px;
+  color: var(--ava-primary);
+  text-transform: uppercase;
+}
+#logo a { display: block; }
+#logo img {
+  display: block;
+  width: 162px;
+  height: auto;
+  max-width: 100%;
+  transition: max-height .5s;
+}
+#logo img.header-logo-dark { display: none; }
+
+/* --- Primary navigation ---------------------------------------------------- */
+
+.nav {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-left   { justify-content: flex-start; }
+.nav-center { justify-content: center; }
+.nav-right  { justify-content: flex-end; }
+
+.header-nav-main.nav-left { justify-content: center; }
+
+/* `.logo-left .flex-right` is forced to a 200px minimum, so a shrink-wrapped
+   list would float in the middle of it. Filling the column lets
+   `justify-content` actually push the items to the right edge. */
+.header-inner > .flex-col > ul.nav { width: 100%; }
+
+.nav > li {
+  position: relative;
+  display: inline-block;
+  margin: 0 7px;
+  padding: 0;
+  list-style: none;
+  transition: background-color .3s;
+}
+.nav > li:first-child { margin-left: 0 !important; }
+.nav > li:last-child  { margin-right: 0 !important; }
+
+.nav > li > a {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  color: #2c2c2c;
+  transition: .2s;
+}
+.nav > li.active > a,
+.nav > li.current-menu-item > a,
+.nav > li > a:hover { color: #000; }
+
+/* The caret after "Giới thiệu" / "Tin tức". `.nav > li > a` is an inline-flex
+   with `align-items: center`, so the icon centres itself; the margin is what
+   separates it from the label. */
+.nav > li > a > i {
+  display: block;
+  margin-left: .2em;
+  font-size: 16px;
+  line-height: 1.2;
+  vertical-align: middle;
+  opacity: .6;
+  transition: color .3s;
+}
+
+.nav-size-xlarge > li > a { font-size: 1.1em; }          /* 17.6px */
+.nav-spacing-xlarge > li  { margin: 0 15px; }
+
+/* All top-level items use the bold face, as on the original. */
+.header-nav-main > li > a {
+  font-family: var(--ava-font-bold);
+  font-weight: 700;
+  line-height: 1.6;
+  padding-bottom: 2px;
+  padding-top: 0;
+}
+
+/* Red underline bar — grows in on hover and for the current page. */
+.nav-line-bottom > li > a::before {
+  content: " ";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 3px;
+  background-color: var(--ava-primary);
+  opacity: 0;
+  transition: .3s;
+}
+.nav-line-bottom > li.active > a::before,
+.nav-line-bottom > li.current-menu-item > a::before,
+.nav-line-bottom > li:hover > a::before { opacity: 1; }
+
+.nav-uppercase > li > a { text-transform: uppercase; letter-spacing: .02em; font-weight: bolder; }
+
+/* Language switcher + search live in an `li.html` which needs no padding. */
+.nav > li.html > a { padding-top: 0; padding-bottom: 0; }
+.nav > li.html { font-size: .9em; }
+.html_topbar_left a { font-family: var(--ava-font-bold); font-weight: 700; }
+.html_topbar_left a.active { color: var(--ava-primary); }
+
+/* --- Desktop dropdown ------------------------------------------------------ */
+
+.nav-dropdown {
+  position: absolute;
+  left: -99999px;
+  top: 100%;
+  z-index: 9;
+  min-width: 180px;
+  padding: 20px;
+  margin: 0;
+  list-style: none;
+  background-color: #fff;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, .15);
+  border: 2px solid #ddd;
+  font-size: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s;
+}
+.nav-dropdown::after { content: ""; display: block; clear: both; height: 0; }
+
+li.has-dropdown:hover > .nav-dropdown,
+li.current-dropdown > .nav-dropdown {
+  left: -15px;
+  opacity: 1;
+  visibility: visible;
+}
+.nav-right li.has-dropdown:hover:last-child > .nav-dropdown,
+.nav-right li.current-dropdown:last-child > .nav-dropdown { left: auto; right: -15px; }
+
+.nav-dropdown li { display: block; margin: 0; white-space: nowrap; }
+.nav-dropdown > li > a {
+  display: block;
+  padding: 10px 0;
+  line-height: 1.3;
+  color: #000;
+  transition: .2s;
+}
+.nav-dropdown > li > a:hover,
+.nav-dropdown li.active > a { color: var(--ava-primary); }
+.nav-dropdown > li > a { border-bottom: 1px solid #ececec; }
+.nav-dropdown > li:last-child > a { border-bottom: 0; }
+
+/* The little white caret above an open dropdown. */
+.nav-dropdown-has-arrow li.has-dropdown::before,
+.nav-dropdown-has-arrow li.has-dropdown::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 0; height: 0;
+  border: solid transparent;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.nav-dropdown-has-arrow li.has-dropdown::after {
+  border-width: 8px;
+  margin-left: -8px;
+  border-color: transparent transparent #fff;
+}
+.nav-dropdown-has-arrow li.has-dropdown::before {
+  border-width: 11px;
+  margin-left: -11px;
+  border-color: transparent transparent #ddd;
+  z-index: -999;
+}
+.nav-dropdown-has-arrow li.has-dropdown:hover::before,
+.nav-dropdown-has-arrow li.has-dropdown:hover::after,
+.nav-dropdown-has-arrow li.current-dropdown.has-dropdown::before,
+.nav-dropdown-has-arrow li.current-dropdown.has-dropdown::after { opacity: 1; transition: opacity .25s; }
+
+/* --- Responsive header switches ------------------------------------------- */
+
+.show-for-medium { display: none !important; }
+@media screen and (max-width: 849px) {
+  .hide-for-medium { display: none !important; }
+  .show-for-medium { display: block !important; }
+  .show-for-medium.flex-col { display: flex !important; }
+  .header-inner { height: 70px; }
+  #logo img { width: 130px; }
+}
+@media screen and (max-width: 549px) {
+  .hide-for-small { display: none !important; }
+  #logo img { width: 112px; }
+}
+
+/* Mobile hamburger button */
+.header-button .button.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5em;
+  min-height: 2.5em;
+  margin: 0;
+  padding: 0;
+}
+.nav-icon .button.round { border-radius: 99px; }
+.nav-icon i.icon-menu { font-size: 20px; }
+
+/* ==========================================================================
+   Off-canvas mobile menu (#main-menu)
+   ========================================================================== */
+
+.mfp-hide { display: none !important; }
+
+.off-canvas-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1042;
+  background-color: var(--ava-primary);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s, visibility .25s;
+}
+.off-canvas-open .off-canvas-overlay { opacity: .6; visibility: visible; }
+
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1045;
+  width: 300px;
+  max-width: 100%;
+  overflow: hidden;
+  background-color: rgba(26, 26, 26, .95);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+  color: var(--ava-light);
+  transform: translateX(100%);
+  transition: transform .2s;
+}
+.mobile-sidebar.is-open { transform: translateX(0); }
+
+/* `no-scrollbar` hides the native bar but keeps the panel scrollable. */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { width: 0; height: 0; }
+
+.mobile-sidebar .sidebar-menu {
+  height: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
+  transform: translateX(0);
+  transition: transform .3s;
+  will-change: transform;
+}
+/* One level deep: the whole tray slides left by its own width. JS sets
+   --ava-tray-shift from the panel's measured width so this also holds on
+   viewports narrower than 300px. */
+.mobile-sidebar .sidebar-menu.is-slid {
+  transform: translateX(calc(-1 * var(--ava-tray-shift, 300px)));
+}
+
+.nav-sidebar,
+.nav-vertical {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-slide { height: 100%; overflow: hidden auto; padding-top: 20px; }
+.nav-slide > li { flex-shrink: 0; }
+
+.nav-sidebar > li {
+  position: relative;
+  display: flex;
+  flex-flow: wrap;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, .2);
+  transition: background-color .3s;
+}
+.nav-sidebar > li:hover,
+.nav-sidebar > li.active { background-color: rgba(255, 255, 255, .05); }
+.nav-sidebar > li.header-search-form { border-top: 0; }
+
+/* Scoped to `.mobile-sidebar` so it outranks the site layer's blanket
+   `.nav > li > a { padding: 0 }`, exactly as the original scopes these under
+   `.off-canvas`. */
+.mobile-sidebar .nav-sidebar > li > a {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  padding: 15px 0 15px 20px;
+  font-family: var(--ava-font-bold);
+  font-size: .8em;                    /* 12.8px */
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .8);
+  transition: .2s;
+}
+.mobile-sidebar .nav-sidebar > li > a:hover { color: #fff; }
+
+/* Chevron that opens a sub-level. */
+.nav-sidebar li > button.toggle {
+  width: 45px;
+  padding: 0;
+  opacity: .6;
+  color: inherit;
+  cursor: pointer;
+  transition: transform .3s, opacity .3s, color .3s;
+}
+.nav-sidebar li > button.toggle:hover { opacity: 1; }
+.nav-sidebar li > button.toggle i { font-size: 1.2em; }
+
+/* Sub-level sits just off the right edge of the tray.
+   `.sidebar-menu` carries a transform, which makes it the containing block for
+   these fixed children — so `left: 100%` and `width: 100%` resolve against the
+   300px tray rather than the viewport. */
+.mobile-sidebar-levels-1 .nav-slide > li > .sub-menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  width: 100%;
+  display: none;
+  padding: 20px 0;
+  margin: 0;
+  list-style: none;
+  overflow: visible auto;
+}
+.mobile-sidebar-levels-1 .nav-slide > li > .sub-menu.is-current-slide { display: block; }
+
+/* Second-level rows are quieter than the top level: sentence case, body size,
+   tighter padding and no dividers. */
+.mobile-sidebar-levels-1 .nav-slide > li > .sub-menu > li:not(.nav-slide-header) {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  padding: 0 0 0 8px;
+  border-top: 0;
+  transition: background-color .3s;
+}
+.mobile-sidebar-levels-1 .nav-slide > li > .sub-menu > li:not(.nav-slide-header):hover { background-color: rgba(255, 255, 255, .05); }
+
+.mobile-sidebar .mobile-sidebar-levels-1 .nav-slide > li > .sub-menu > li > a,
+.mobile-sidebar-levels-1 .nav-slide > li > .sub-menu > li > a {
+  display: flex;
+  flex: 1 1 auto;
+  padding: 5px 0 5px 20px;
+  font-family: var(--ava-font);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: normal;
+  text-transform: none;
+  color: rgba(255, 255, 255, .8);
+}
+.mobile-sidebar-levels-1 .nav-slide > li > .sub-menu > li > a:hover { color: #fff; }
+
+/* "‹ GIỚI THIỆU" back row. Scoped to match the generic row rule's weight. */
+.mobile-sidebar-levels-1 .nav-slide > li > .sub-menu > li.nav-slide-header,
+.nav-slide-header {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  padding: 15px 0 15px 8px;
+  border-top: 0 !important;
+}
+.nav-slide-header:hover { background: none !important; }
+
+.mobile-sidebar .nav-slide-header .toggle,
+.nav-slide-header .toggle {
+  position: relative !important;
+  top: 0 !important;
+  display: block;
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  min-height: 38.8px;
+  margin: 0 5px 0 0 !important;
+  padding: 0 0 0 5px;
+  border: 1px solid transparent;
+  background: none;
+  font-family: var(--ava-font-bold);
+  font-size: .97em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: normal;
+  color: var(--ava-light);
+  opacity: .6;
+  cursor: pointer;
+}
+.nav-slide-header .toggle:hover { opacity: 1; }
+.nav-slide-header .toggle i {
+  position: relative;
+  top: -1.5px;
+  display: inline-block;
+  margin-right: 2px;
+  font-size: 1.4em;
+  vertical-align: middle;
+}
+
+/* Panel close button. The explicit min-* and padding reset are needed because
+   it is a <button> and would otherwise pick up the button component's sizing. */
+.off-canvas-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1046;
+  width: 40px;
+  height: 40px;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 28px;
+  line-height: 40px;
+  text-align: center;
+  color: var(--ava-light);
+  opacity: .6;
+  cursor: pointer;
+  transition: opacity .3s;
+}
+.off-canvas-close:hover { opacity: 1; }
+
+/* Search field inside the tray. The 20px inset on the row is what keeps the
+   pill clear of the close button; the .85em context is what sizes the field
+   (the shared input rule is height: 2.507em). */
+.mobile-sidebar li.header-search-form { display: block; padding: 20px; border-top: 0; }
+.mobile-sidebar li.header-search-form:hover { background: none; }
+.mobile-sidebar .header-search-form-wrapper { font-size: .85rem; }
+.mobile-sidebar .searchform-wrapper { width: 100%; margin: 0; }
+.mobile-sidebar .search-field {
+  width: 100%;
+  margin: 0;
+  padding: 0 .75em;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, .09);
+  background-color: rgba(255, 255, 255, .2);
+  color: rgba(255, 255, 255, .8);
+  box-shadow: none;
+}
+.mobile-sidebar .search-field::placeholder { color: rgba(255, 255, 255, .5); }
+.mobile-sidebar .ux-search-submit {
+  min-width: 2.5em;
+  min-height: 2.5em;
+  margin: 0;
+  padding: 0 .6em;
+  border-radius: 99px;
+  border-color: transparent;
+  background-color: transparent;
+  color: rgba(255, 255, 255, .8);
+}
+
+/* Prevent the page behind the tray from scrolling. */
+html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
+
+/* --- Search lightbox (desktop) -------------------------------------------- */
+
+.search-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, .85);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s, visibility .25s;
+}
+.search-lightbox-overlay.is-open { opacity: 1; visibility: visible; }
+.search-lightbox-overlay .searchform-wrapper { width: 100%; max-width: 600px; }
+.search-lightbox-overlay .search-field {
+  width: 100%;
+  height: 56px;
+  padding: 0 18px;
+  font-size: 1.2em;
+  border: 0;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+}
+.search-lightbox-overlay .search-field::placeholder { color: rgba(255, 255, 255, .55); }
+.search-lightbox-overlay .ux-search-submit {
+  min-height: 56px; min-width: 56px;
+  border-radius: 99px; border: 0;
+  background: var(--ava-primary); color: #fff;
+}
+
+/* EN is inert in this clone (Vietnamese pages only). */
+.html_topbar_left a.lang-en { cursor: default; }

@@ -1,0 +1,276 @@
+/* ==========================================================================
+   AVA Architects — 02. Layout
+   Container, the 12-column flex grid, sections, flex helpers.
+   Breakpoints (measured): small < 550px, medium 550–849px, large >= 850px.
+   ========================================================================== */
+
+#wrapper { position: relative; overflow: hidden; }
+#main { position: relative; }
+
+/* --- Container ----------------------------------------------------------- */
+
+.container,
+.container-width,
+.row {
+  width: 100%;
+  max-width: var(--ava-container);   /* 1170px -> 1140px of content */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container { padding-left: var(--ava-gutter); padding-right: var(--ava-gutter); }
+
+/* Clearfix on containers and rows. It also stops a last child's bottom margin
+   collapsing out of the box, which several section spacings rely on. */
+.clear::after, .clearfix::after, .container::after, .row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.row .container { padding-left: 0; padding-right: 0; }
+
+/* --- Row / column grid ---------------------------------------------------- */
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.container .row:not(.row-collapse),
+.row .row:not(.row-collapse) {
+  width: auto;
+  margin-left: calc(var(--ava-gutter) * -1);
+  margin-right: calc(var(--ava-gutter) * -1);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.col, .columns, .gallery-item {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0 15px 30px;
+}
+
+.col-inner {
+  position: relative;
+  width: 100%;
+  flex: 1 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* A bare <div> dropped inside a row always spans it. */
+.row > div:not(.col):not([class^="col-"]):not([class*=" col-"]) { width: 100% !important; }
+
+/* Row gutter variants. These max-widths are the theme's customised set for a
+   1170px container (the Flatsome defaults assume 1080px), measured live. */
+.row.row-collapse { max-width: 1140px; padding: 0; }
+.row.row-collapse > .col,
+.row-collapse > .flickity-viewport > .flickity-slider > .col { padding: 0 !important; }
+.row.row-collapse > .col .container { max-width: 100%; }
+
+.row.row-small { max-width: 1162.5px; }
+.container .row-small:not(.row-collapse),
+.row .row-small:not(.row-collapse) { margin-left: -10px; margin-right: -10px; margin-bottom: 0; }
+.row-small > .col,
+.row-small > .flickity-viewport > .flickity-slider > .col { padding: 0 9.8px 19.6px; margin-bottom: 0; }
+
+.row.row-xsmall { max-width: var(--ava-container); }
+.container .row-xsmall:not(.row-collapse),
+.row .row-xsmall:not(.row-collapse) { margin-left: -2px; margin-right: -2px; margin-bottom: 0; }
+.row-xsmall > .col,
+.row-xsmall > .flickity-viewport > .flickity-slider > .col { padding: 0 2px 3px; margin-bottom: 0; }
+
+.row.row-large { max-width: 1200px; }
+.container .row-large:not(.row-collapse),
+.row .row-large:not(.row-collapse) { margin-left: -30px; margin-right: -30px; }
+.row-large > .col,
+.row-large > .flickity-viewport > .flickity-slider > .col { padding: 0 30px 30px; }
+
+.row-full-width { max-width: 100% !important; }
+.row-isotope { transition: height .3s; }
+.row-reverse { flex-direction: row-reverse; }
+
+.row.row-grid, .row.row-masonry { display: block; }
+.row.row-grid > .col, .row.row-masonry > .col { float: left; }
+.row-grid .box .image-cover { height: 100%; padding: 0; }
+
+/* Vertical / horizontal alignment modifiers */
+.align-top { align-items: flex-start; }
+.align-middle { align-items: center; }
+.align-bottom { align-items: flex-end; }
+.align-equal > .col { display: flex; }
+.align-equal > .col > .col-inner { display: flex; flex-direction: column; }
+.align-center { justify-content: center; }
+.align-right { justify-content: flex-end; }
+.align-left { justify-content: flex-start; }
+
+/* Column spans. Mobile-first: full width, then medium, then large. */
+.small-1  { flex-basis: 8.3333%;  max-width: 8.3333%; }
+.small-2  { flex-basis: 16.6667%; max-width: 16.6667%; }
+.small-3  { flex-basis: 25%;      max-width: 25%; }
+.small-4  { flex-basis: 33.3333%; max-width: 33.3333%; }
+.small-5  { flex-basis: 41.6667%; max-width: 41.6667%; }
+.small-6  { flex-basis: 50%;      max-width: 50%; }
+.small-7  { flex-basis: 58.3333%; max-width: 58.3333%; }
+.small-8  { flex-basis: 66.6667%; max-width: 66.6667%; }
+.small-9  { flex-basis: 75%;      max-width: 75%; }
+.small-10 { flex-basis: 83.3333%; max-width: 83.3333%; }
+.small-11 { flex-basis: 91.6667%; max-width: 91.6667%; }
+.small-12 { flex-basis: 100%;     max-width: 100%; }
+
+@media screen and (min-width: 550px) {
+  .medium-1  { flex-basis: 8.3333%;  max-width: 8.3333%; }
+  .medium-2  { flex-basis: 16.6667%; max-width: 16.6667%; }
+  .medium-3  { flex-basis: 25%;      max-width: 25%; }
+  .medium-4  { flex-basis: 33.3333%; max-width: 33.3333%; }
+  .medium-5  { flex-basis: 41.6667%; max-width: 41.6667%; }
+  .medium-6  { flex-basis: 50%;      max-width: 50%; }
+  .medium-7  { flex-basis: 58.3333%; max-width: 58.3333%; }
+  .medium-8  { flex-basis: 66.6667%; max-width: 66.6667%; }
+  .medium-9  { flex-basis: 75%;      max-width: 75%; }
+  .medium-10 { flex-basis: 83.3333%; max-width: 83.3333%; }
+  .medium-11 { flex-basis: 91.6667%; max-width: 91.6667%; }
+  .medium-12 { flex-basis: 100%;     max-width: 100%; }
+}
+
+@media screen and (min-width: 850px) {
+  .large-1  { flex-basis: 8.3333%;  max-width: 8.3333%; }
+  .large-2  { flex-basis: 16.6667%; max-width: 16.6667%; }
+  .large-3  { flex-basis: 25%;      max-width: 25%; }
+  .large-4  { flex-basis: 33.3333%; max-width: 33.3333%; }
+  .large-5  { flex-basis: 41.6667%; max-width: 41.6667%; }
+  .large-6  { flex-basis: 50%;      max-width: 50%; }
+  .large-7  { flex-basis: 58.3333%; max-width: 58.3333%; }
+  .large-8  { flex-basis: 66.6667%; max-width: 66.6667%; }
+  .large-9  { flex-basis: 75%;      max-width: 75%; }
+  .large-10 { flex-basis: 83.3333%; max-width: 83.3333%; }
+  .large-11 { flex-basis: 91.6667%; max-width: 91.6667%; }
+  .large-12 { flex-basis: 100%;     max-width: 100%; }
+}
+
+.col-fit   { flex: 1 1 0; }
+.col-first { order: -1; }
+.col-last  { order: 1; }
+.col-has-radius { overflow: hidden; }
+
+/* Equal-height card grids, e.g. `large-columns-3 medium-columns-1 small-columns-1`. */
+.large-columns-1 > .col { flex-basis: 100%; max-width: 100%; }
+@media screen and (min-width: 850px) {
+  .large-columns-2 > .col { flex-basis: 50%;      max-width: 50%; }
+  .large-columns-3 > .col { flex-basis: 33.3333%; max-width: 33.3333%; }
+  .large-columns-4 > .col { flex-basis: 25%;      max-width: 25%; }
+  .large-columns-5 > .col { flex-basis: 20%;      max-width: 20%; }
+  .large-columns-6 > .col { flex-basis: 16.6667%; max-width: 16.6667%; }
+}
+@media screen and (min-width: 550px) and (max-width: 849px) {
+  .medium-columns-1 > .col { flex-basis: 100%;     max-width: 100%; }
+  .medium-columns-2 > .col { flex-basis: 50%;      max-width: 50%; }
+  .medium-columns-3 > .col { flex-basis: 33.3333%; max-width: 33.3333%; }
+  .medium-columns-4 > .col { flex-basis: 25%;      max-width: 25%; }
+}
+@media screen and (max-width: 549px) {
+  .small-columns-1 > .col { flex-basis: 100%; max-width: 100%; }
+  .small-columns-2 > .col { flex-basis: 50%;  max-width: 50%; }
+}
+
+/* --- Sections ------------------------------------------------------------- */
+
+.section {
+  position: relative;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  width: 100%;
+  min-height: auto;
+  padding: 30px 0;
+}
+
+.container .section, .row .section { padding-left: 30px; padding-right: 30px; }
+
+.section-bg { width: 100%; overflow: hidden; }
+.section-content { position: relative; width: 100%; z-index: 1; }
+
+.section-bg :is(img, picture, video),
+.banner-bg :is(img, picture, video) {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+
+/* A section immediately after a banner/slider gets breathing room. */
+.banner + .row:not(.row-collapse),
+.section + .row:not(.row-collapse),
+.slider-wrapper + .row:not(.row-collapse) { margin-top: 30px; }
+
+/* --- Flex helpers --------------------------------------------------------- */
+
+.flex-row {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.flex-row-start  { justify-content: flex-start; }
+.flex-row-center { justify-content: center; }
+.flex-row-end    { justify-content: flex-end; }
+.flex-col   { max-height: 100%; }
+.flex-grow  { flex: 1 1 0; }
+.flex-shrink{ flex: 0 0 auto; }
+.flex-center{ margin: 0 auto; }
+.flex-left  { margin-right: auto; }
+.flex-right { margin-left: auto; }
+.flex-wrap  { flex-wrap: wrap; }
+
+@media screen and (max-width: 849px) {
+  .medium-flex-wrap { flex-wrap: wrap; }
+  .medium-flex-wrap > .flex-col { flex-basis: 100%; }
+}
+
+/* --- Stack (the footer/columns primitive) --------------------------------- */
+
+.stack { display: flex; --stack-gap: 0rem; }
+.stack-row { flex-direction: row; }
+.stack-col { flex-direction: column; }
+.justify-start   { justify-content: flex-start; }
+.justify-center  { justify-content: center; }
+.justify-end     { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.items-stretch { align-items: stretch; }
+.items-center  { align-items: center; }
+.items-start   { align-items: flex-start; }
+
+.gap-8   { gap: .5rem; }
+.gap-16  { gap: 1rem; }
+.gap-24  { gap: 1.5rem; }
+.gapx-16 { column-gap: 1rem; }
+.gapx-24 { column-gap: 1.5rem; }
+.gapx-36 { column-gap: 2.25rem; }
+.gapy-16 { row-gap: 1rem; }
+.gapy-24 { row-gap: 1.5rem; }
+
+.w-160 { width: 160px; }
+.w-276 { width: 276px; }
+
+@media screen and (max-width: 549px) {
+  .sm\:stack-col { flex-direction: column; }
+  .full-mobile { width: 100% !important; }
+}

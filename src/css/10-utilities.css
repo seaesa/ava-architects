@@ -1,0 +1,119 @@
+/* ==========================================================================
+   AVA Architects — 10. Utilities
+   The small single-purpose classes the page builder sprinkles through markup.
+   ========================================================================== */
+
+/* Alignment */
+.text-left   { text-align: left; }
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+.uppercase   { text-transform: uppercase; letter-spacing: .05em; }
+.lowercase   { text-transform: none; }
+.txt-center  { text-align: center; }
+
+/* Opacity steps */
+.op-1 { opacity: .1; } .op-2 { opacity: .2; } .op-3 { opacity: .3; }
+.op-4 { opacity: .4; } .op-5 { opacity: .5; } .op-6 { opacity: .6; }
+.op-7 { opacity: .7; } .op-8 { opacity: .8; } .op-9 { opacity: .9; }
+
+/* Relative type scale. Applies to any element, not just buttons; the small
+   breakpoint tones the three largest steps down. */
+.is-xxsmall { font-size: .6em; }
+.is-xsmall  { font-size: .7em; }
+.is-smaller { font-size: .75em; }
+.is-small, .is-small.button { font-size: .8em; }
+.is-normal  { font-size: 1em; }
+.is-medium  { font-size: 1em; }
+.is-large   { font-size: 1.15em; }
+.is-larger  { font-size: 1.3em; }
+.is-xlarge  { font-size: 1.5em; }
+
+@media screen and (max-width: 549px) {
+  .is-large  { font-size: 1em; }
+  .is-larger { font-size: 1.2em; }
+  .is-xlarge { font-size: 1.8em; }
+}
+
+/* Spacing */
+.mb-0 { margin-bottom: 0 !important; }
+.mb   { margin-bottom: 30px; }
+.mt-0 { margin-top: 0 !important; }
+.pb-0 { padding-bottom: 0 !important; }
+.pt-0 { padding-top: 0 !important; }
+.pb   { padding-bottom: 30px; }
+.pt-half { padding-top: 7.5px; }
+.pb-half { padding-bottom: 7.5px; }
+
+/* Links that should not pick up the default link colour */
+.plain, a.plain { color: inherit; }
+
+/* Shapes */
+.circle { border-radius: 999px; }
+.round  { border-radius: 99px; }
+
+/* Dark context: light text on dark plates */
+.dark, .dark p, .dark li, .dark td { color: var(--ava-light); }
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { color: #fff; }
+.dark a { color: currentColor; }
+.dark a:hover { color: #fff; }
+
+/* Visibility */
+@media screen and (max-width: 549px) {
+  .hide-for-small { display: none !important; }
+  .show-for-small { display: block !important; }
+}
+@media screen and (min-width: 550px) {
+  .show-for-small { display: none !important; }
+}
+@media screen and (min-width: 850px) {
+  .hide-for-large { display: none !important; }
+}
+
+/* Shape divider (the wave at the foot of some sections) */
+.ux-shape-divider {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  pointer-events: none;
+}
+.ux-shape-divider--bottom { bottom: -1px; }
+.ux-shape-divider--top { top: -1px; transform: rotate(180deg); }
+.ux-shape-divider svg { display: block; width: 100%; height: auto; }
+.ux-shape-fill { fill: #fff; }
+
+/* Tooltips on the social buttons */
+.tooltip { position: relative; }
+
+/* A `.text` block is the builder's generic rich-text wrapper. */
+.text > *:last-child { margin-bottom: 0; }
+
+/* Reveal-on-scroll, applied by main.js */
+[data-animate] { opacity: 0; will-change: transform, opacity; }
+[data-animate].is-animated { opacity: 1; animation-duration: .8s; animation-fill-mode: both; }
+[data-animate="fadeInLeft"].is-animated  { animation-name: ava-fade-in-left; }
+[data-animate="fadeInRight"].is-animated { animation-name: ava-fade-in-right; }
+[data-animate="fadeInUp"].is-animated    { animation-name: ava-fade-in-up; }
+[data-animate="fadeIn"].is-animated      { animation-name: ava-fade-in; }
+
+@keyframes ava-fade-in       { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ava-fade-in-left  { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: none; } }
+@keyframes ava-fade-in-right { from { opacity: 0; transform: translateX(40px); }  to { opacity: 1; transform: none; } }
+@keyframes ava-fade-in-up    { from { opacity: 0; transform: translateY(40px); }  to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-animate] { opacity: 1; }
+}
+
+/* Printing: drop the chrome, keep the content. */
+@media print {
+  #header, #footer, .off-canvas-overlay, .mobile-sidebar, #top-link, .social_fixed { display: none !important; }
+  body { color: #000; }
+}

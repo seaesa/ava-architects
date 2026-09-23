@@ -1,0 +1,14 @@
+{
+ "meta": {
+  "url": "https://ava-architects.vn/author/",
+  "slug": "author",
+  "template": "page",
+  "title": "Tác giả - AVA",
+  "description": "",
+  "ogImage": "",
+  "bodyClass": "page-template-default page page-id-5724 page-template-blank page-template-blank-php"
+ },
+ "content": "<div id=\"content\" role=\"main\" class=\"content-area\">\n\n\t\t\n\t\t\t\n\t\t\t\n\t\t\n</div>",
+ "builderCss": "",
+ "assets": []
+}

@@ -1,0 +1,15 @@
+{
+  "name": "ava-architects-clone",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "crawl": "node build/crawl.mjs",
+    "assets": "node build/download-assets.mjs",
+    "build": "node build/generate.mjs",
+    "serve": "node build/serve.mjs"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0"
+  }
+}

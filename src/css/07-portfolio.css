@@ -1,0 +1,143 @@
+/* ==========================================================================
+   AVA Architects — 07. Portfolio (Dự án)
+   The filterable project grid and the single-project layout.
+   ========================================================================== */
+
+/* --- Project grid ---------------------------------------------------------- */
+
+.portfolio-element-wrapper { position: relative; text-align: center; }
+.row-isotope { transition: height .3s; }
+
+.portfolio-box {
+  position: relative;
+  width: 100%;
+  color: var(--ava-light);
+  text-align: center;
+  transition: opacity .3s, transform .3s, background-color .3s;
+}
+.portfolio-box > a.plain { display: block; }
+
+.portfolio-box .box-image { position: relative; overflow: hidden; }
+.portfolio-box .box-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter .6s, opacity .6s, transform .6s, box-shadow .3s;
+}
+.portfolio-box:hover .box-image img { transform: scale(1.06); }
+
+/* The dark wash that keeps the caption readable over any photo. */
+.shade {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(0deg, rgb(50, 50, 50) 0, rgba(50, 50, 50, 0) 33%);
+  opacity: .3;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+.portfolio-box:hover .shade { opacity: .55; }
+
+.portfolio-box .box-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10.08px 21.6px 20.16px;
+  font-size: .9em;
+  line-height: 1.6;
+  text-align: left;
+  color: var(--ava-light);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+  transition: .5s ease-out;
+  z-index: 2;
+}
+.portfolio-box .box-text-inner { transition: .5s ease-out; }
+.portfolio-box .box-text a { color: inherit; }
+
+/* Project name */
+.portfolio-box .box-text p.uppercase,
+.portfolio-box .box-text .portfolio-box-title {
+  margin: .1em 0 15px;
+  font-size: 1.11em;             /* 16px */
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #fff;
+}
+/* Category eyebrow above the name */
+.portfolio-box .box-text .portfolio-box-cat { font-size: .8em; opacity: .85; text-transform: uppercase; }
+
+/* Filter bar on /du-an/ */
+.portfolio-filter,
+.has-filtering .filter-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+.portfolio-filter a,
+.filter-button {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid var(--ava-border);
+  font-size: .9em;
+  text-transform: uppercase;
+  transition: .3s;
+  cursor: pointer;
+}
+.portfolio-filter a.active,
+.portfolio-filter a:hover,
+.filter-button.active,
+.filter-button:hover {
+  background: var(--ava-primary);
+  border-color: var(--ava-primary);
+  color: #fff;
+}
+
+/* Isotope hides non-matching items by class rather than by inline styles. */
+.portfolio-box.is-filtered-out { display: none !important; }
+
+/* --- Single project --------------------------------------------------------- */
+
+.portfolio-page-wrapper { padding: 0 0 30px; }
+.portfolio-single-page .page-title { position: relative; }
+
+#image_detail_pr { width: 100%; }
+#image_detail_pr img { width: 100%; }
+
+.portfolio-top { position: relative; }
+.portfolio-inner { position: relative; }
+
+.portfolio-inner > h3 {
+  margin: 0 0 10px;
+  font-size: 1.25em;            /* 20px, enlarged inline to 150% for the name */
+  line-height: 1.6;
+  color: #2c2c2c;
+}
+.portfolio-inner p.txt-upper {
+  margin: 0 0 20.8px;
+  text-transform: uppercase;
+}
+.txt-upper { text-transform: uppercase; }
+
+/* The metadata rows (Chủ đầu tư / Địa điểm / Diện tích …). */
+.portfolio-inner .icon-box.icon-box-left {
+  display: flex;
+  align-items: center;
+  margin: 0 0 8px;
+  text-align: left;
+}
+.portfolio-inner .icon-box-left .icon-box-img { width: 20px; max-width: 200px; flex: 0 0 auto; margin-bottom: 0; }
+.portfolio-inner .icon-box-left .icon-box-text { padding-left: 8px; flex: 1 1 0; }
+.portfolio-inner .icon-box-text p { margin: 0; }
+.last-reset > *:last-child { margin-bottom: 0; }
+
+.location-ic, .other-ic { display: inline-block; }
+
+/* --- Related projects -------------------------------------------------------- */
+
+.related-projects { padding: 30px 0; }
+.related-projects .section-title-container { margin-bottom: 20px; }
+
+@media screen and (max-width: 849px) {
+  .portfolio-box .box-text { padding: 8px 14px 14px; }
+  .portfolio-box .box-text p.uppercase { font-size: 1em; margin-bottom: 8px; }
+}

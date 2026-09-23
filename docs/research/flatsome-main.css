@@ -1,0 +1,13 @@
+
+@font-face {
+				font-family: "fl-icons";
+				font-display: block;
+				src: url(https://ava-architects.vn/wp-content/themes/flatsome/assets/css/icons/fl-icons.eot?v=3.19.7);
+				src:
+					url(https://ava-architects.vn/wp-content/themes/flatsome/assets/css/icons/fl-icons.eot#iefix?v=3.19.7) format("embedded-opentype"),
+					url(https://ava-architects.vn/wp-content/themes/flatsome/assets/css/icons/fl-icons.woff2?v=3.19.7) format("woff2"),
+					url(https://ava-architects.vn/wp-content/themes/flatsome/assets/css/icons/fl-icons.ttf?v=3.19.7) format("truetype"),
+					url(https://ava-architects.vn/wp-content/themes/flatsome/assets/css/icons/fl-icons.woff?v=3.19.7) format("woff"),
+					url(https://ava-architects.vn/wp-content/themes/flatsome/assets/css/icons/fl-icons.svg?v=3.19.7#fl-icons) format("svg");
+			}
+/*# sourceURL=flatsome-main-inline-css */

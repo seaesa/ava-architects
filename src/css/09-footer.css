@@ -1,0 +1,90 @@
+/* ==========================================================================
+   AVA Architects — 09. Footer
+   ========================================================================== */
+
+#footer { position: relative; }
+
+.footer-customize {
+  border-top: 1px solid #c3c3c3;
+  padding: 30px 0;
+}
+
+/* Column headings ("Khám phá", "Đăng ký nhận tin mới") are 120% of body. */
+.footer-customize .text strong { font-family: var(--ava-font-bold); font-weight: 700; }
+
+#footer .text.fz-16, .fz-16 { font-size: 1em; }
+#footer .text.fz-16 p { margin: 0 0 20.8px; line-height: 2; }
+#footer .text.fz-16 p:last-child { margin-bottom: 0; }
+
+/* The vertical lock-up logo. */
+.footer-customize .img-inner img { width: 100%; height: auto; }
+
+/* --- Footer link menu ------------------------------------------------------ */
+
+.ux-menu { display: flex; }
+.ux-menu.stack-col { flex-direction: column; }
+.ux-menu-link { display: flex; }
+.ux-menu-link__link {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+  min-height: 40px;
+  padding: 4.8px 0;
+  color: var(--ava-ink);
+  border-bottom: 0 none var(--ava-border);
+  transition: color .3s;
+}
+.ux-menu-link__link:hover { color: var(--ava-primary); }
+.ux-menu-link__text { display: block; }
+.dark .ux-menu-link__link { border-bottom-color: rgba(255, 255, 255, .2); }
+.dark .ux-menu-link:hover .ux-menu-link__link { color: rgba(255, 255, 255, .85); }
+
+/* --- Social buttons -------------------------------------------------------- */
+
+.footer-customize .social-icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-customize .social-icons a {
+  border: none;
+  background: var(--ava-primary);
+  opacity: 1;
+}
+.footer-customize .button.icon.circle {
+  width: 33px;
+  min-width: 33px;
+  min-height: 33px;
+  margin: 0 20px 13px 2px;
+  padding: 0 2.5px;
+  border-radius: 999px;
+  background: var(--ava-primary);
+  line-height: 29px;
+  text-align: center;
+}
+.footer-customize .button.icon.circle:last-child { margin-right: 0; }
+.footer-customize .social-icons i::before { color: #fff; }
+.footer-customize .social-icons a:hover { opacity: .85; }
+
+/* --- Copyright bar --------------------------------------------------------- */
+
+.absolute-footer {
+  padding: 10px 0 15px;
+  background-color: #fff;
+  color: rgba(0, 0, 0, .5);
+  font-size: .9em;
+  line-height: 1.6;
+  text-align: center;
+}
+.absolute-footer a { color: inherit; }
+.absolute-footer a:hover { color: var(--ava-primary); }
+
+@media screen and (max-width: 849px) {
+  .footer-customize .stack-row { flex-wrap: wrap; }
+  .footer-customize .w-160, .footer-customize .w-276 { width: 100%; }
+}
+@media screen and (max-width: 549px) {
+  .footer-customize { padding: 24px 0; }
+  .footer-customize .social-icons { justify-content: flex-start; gap: 8px; }
+  .footer-customize .button.icon.circle { margin-right: 8px; }
+}

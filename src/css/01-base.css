@@ -1,0 +1,150 @@
+/* ==========================================================================
+   AVA Architects — 01. Base
+   Reset, self-hosted fonts, design tokens, elemental typography.
+   Every value here was measured from the live site with getComputedStyle().
+   ========================================================================== */
+
+/* --- Fonts ---------------------------------------------------------------
+   The site swaps *families* rather than weights: regular copy uses
+   "San Francisco Display", bold copy uses a separate "San Francisco Display Bold"
+   family. Both are kept so inherited `font-family` declarations behave
+   identically to the original.                                             */
+
+@font-face {
+  font-family: "San Francisco Display";
+  src: url("../fonts/SanFranciscoDisplay-Regular.woff2") format("woff2"),
+       url("../fonts/SanFranciscoDisplay-Regular.woff") format("woff"),
+       url("../fonts/SanFranciscoDisplay-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "San Francisco Display Bold";
+  src: url("../fonts/SanFranciscoDisplay-Bold.woff2") format("woff2"),
+       url("../fonts/SanFranciscoDisplay-Bold.woff") format("woff"),
+       url("../fonts/SanFranciscoDisplay-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Flatsome's icon font — the chevrons, search glyph, social marks. */
+@font-face {
+  font-family: "fl-icons";
+  src: url("../fonts/fl-icons.woff2") format("woff2"),
+       url("../fonts/fl-icons.woff") format("woff"),
+       url("../fonts/fl-icons.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+/* --- Tokens -------------------------------------------------------------- */
+
+:root {
+  --ava-primary: #d3242b;         /* brand red: buttons, overlay, accents */
+  --ava-primary-bar: #d2242a;     /* the section-title bar is a hair darker */
+  --ava-secondary: #000;
+  --ava-ink: #1a1a1a;             /* body text, forced site-wide */
+  --ava-muted: #777;
+  --ava-light: #f1f1f1;
+  --ava-border: #ececec;
+
+  --ava-font: "San Francisco Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --ava-font-bold: "San Francisco Display Bold", "San Francisco Display", -apple-system, sans-serif;
+
+  --ava-container: 1170px;
+  --ava-gutter: 15px;
+
+  --ava-header-h: 76px;
+  --ava-header-h-stuck: 80px;
+}
+
+/* --- Reset --------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 100%;
+  background: #fff;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--ava-font);
+  font-size: 100%;           /* 16px */
+  line-height: 1.6;          /* → 25.6px */
+  color: var(--ava-ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* The child theme forces this colour over every Flatsome default. */
+html body { color: var(--ava-ink); }
+
+img, picture, video, canvas, svg { display: block; max-width: 100%; height: auto; }
+img { border: 0; }
+
+button, input, select, textarea { font: inherit; color: inherit; margin: 0; }
+button { background: none; border: 0; }
+
+ul, ol { margin: 0 0 1.3em; padding-left: 1.2em; }
+figure { margin: 0; }
+
+table { border-collapse: collapse; width: 100%; }
+
+/* --- Typography ---------------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6, .heading-font {
+  font-family: var(--ava-font-bold);
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 .5em;
+  letter-spacing: .01em;
+  text-rendering: optimizeLegibility;
+}
+
+h1 { font-size: 1.7em; line-height: 1.3; }
+h2 { font-size: 1.6em; line-height: 1.3; }
+h3 { font-size: 1.25em; line-height: 1.3; }
+h4 { font-size: 1.125em; line-height: 1.3; }
+h5 { font-size: 1em; line-height: 1.3; }
+h6 { font-size: .85em; line-height: 1.3; opacity: .8; letter-spacing: .05em; text-transform: uppercase; }
+
+p { margin: 0 0 1.3em; }
+p:last-child { margin-bottom: 0; }
+
+a {
+  color: var(--ava-ink);
+  text-decoration: none;
+  transition: color .3s, opacity .3s;
+}
+a:hover { color: var(--ava-primary); }
+
+strong, b { font-family: var(--ava-font-bold); font-weight: 700; }
+
+blockquote {
+  margin: 0 0 1.3em;
+  padding-left: 1.2em;
+  border-left: 3px solid var(--ava-primary);
+  font-style: italic;
+}
+
+hr { border: 0; border-top: 1px solid var(--ava-border); margin: 1.5em 0; }
+
+::selection { background: var(--ava-primary); color: #fff; }
+
+/* Screen-reader-only text, kept for the skip link and aria labels. */
+.screen-reader-text, .sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link { position: absolute; left: -9999px; }
