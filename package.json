@@ -7,9 +7,15 @@
     "crawl": "node build/crawl.mjs",
     "assets": "node build/download-assets.mjs",
     "build": "node build/generate.mjs",
-    "serve": "node build/serve.mjs"
+    "serve": "node build/serve.mjs",
+    "audit": "node build/audit.mjs",
+    "qa": "node build/qa.mjs",
+    "verify": "node build/verify.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
   }
 }

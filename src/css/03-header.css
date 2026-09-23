@@ -537,39 +537,93 @@ li.current-dropdown > .nav-dropdown {
 /* Prevent the page behind the tray from scrolling. */
 html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
 
-/* --- Search lightbox (desktop) -------------------------------------------- */
+/* --- Search lightbox (desktop) --------------------------------------------
+   Measured on the original: a #0b0b0b backdrop at 60%, the panel dropping in
+   from -30px, and a 600px pill sitting in a 1380px content column.          */
 
 .search-lightbox-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1050;
+  z-index: 1043;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, .85);
+  padding: 0 30px;
   opacity: 0;
   visibility: hidden;
   transition: opacity .25s, visibility .25s;
 }
+.search-lightbox-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #0b0b0b;
+  opacity: .6;
+}
 .search-lightbox-overlay.is-open { opacity: 1; visibility: visible; }
-.search-lightbox-overlay .searchform-wrapper { width: 100%; max-width: 600px; }
-.search-lightbox-overlay .search-field {
+
+.search-lightbox-inner {
+  position: relative;
   width: 100%;
-  height: 56px;
-  padding: 0 18px;
-  font-size: 1.2em;
-  border: 0;
+  max-width: 1380px;
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: transform .5s, opacity .3s;
+}
+.search-lightbox-overlay.is-open .search-lightbox-inner { opacity: 1; transform: translateY(0); }
+
+#search-lightbox {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.5em;
+  color: var(--ava-light);
+  text-align: center;
+}
+#search-lightbox .searchform-wrapper { width: 100%; margin: 0; }
+#search-lightbox .search-field {
+  width: 100%;
+  margin: 0;
+  padding: 0 .75em;
+  border: 1px solid rgba(255, 255, 255, .09);
   border-radius: 99px;
-  background: rgba(255, 255, 255, .12);
-  color: #fff;
+  background-color: rgba(255, 255, 255, .2);
+  box-shadow: none;
+  color: var(--ava-light);
 }
-.search-lightbox-overlay .search-field::placeholder { color: rgba(255, 255, 255, .55); }
-.search-lightbox-overlay .ux-search-submit {
-  min-height: 56px; min-width: 56px;
-  border-radius: 99px; border: 0;
-  background: var(--ava-primary); color: #fff;
+#search-lightbox .search-field::placeholder { color: rgba(255, 255, 255, .6); }
+#search-lightbox .ux-search-submit {
+  min-width: 2.5em;
+  min-height: 2.5em;
+  margin: 0;
+  padding: 0 .6em;
+  border: 1px solid transparent;
+  border-radius: 99px;
+  background-color: transparent;
+  color: var(--ava-light);
 }
+
+.search-lightbox-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 40px;
+  line-height: 40px;
+  color: var(--ava-light);
+  opacity: .6;
+  cursor: pointer;
+  transition: opacity .3s;
+}
+.search-lightbox-close:hover { opacity: 1; }
 
 /* EN is inert in this clone (Vietnamese pages only). */
 .html_topbar_left a.lang-en { cursor: default; }

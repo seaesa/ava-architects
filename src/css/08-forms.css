@@ -42,6 +42,12 @@ label { display: block; margin-bottom: .4em; font-size: .9em; }
 input[type="file"] { border: 0; box-shadow: none; padding-left: 0; }
 input[type="checkbox"], input[type="radio"] { width: auto; height: auto; margin-right: .4em; box-shadow: none; }
 
+/* In a flat search box the submit is pulled back over the field's right end,
+   so the two read as a single pill. */
+.flex-row.form-flat .flex-col,
+.form-flat .flex-row .flex-col { padding-right: 4px; }
+.searchform-wrapper.form-flat .flex-col:last-of-type { margin-left: -2.9em; }
+
 /* Pill-shaped variant used inside dark panels. */
 .form-flat input:not([type="submit"]),
 .form-flat select,

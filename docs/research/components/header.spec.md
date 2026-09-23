@@ -79,12 +79,22 @@ every step of a scroll down → up → down → top sequence.
 Two stacked triangles on `li.has-dropdown::before/::after` (11px `#ddd`, 8px `#fff`),
 `opacity: 0 → 1` with `transition: opacity .25s`.
 
+### Caret glyph on a parent item
+`.nav > li > a > i` — `display: block; font-size: 16px; margin-left: .2em;
+opacity: .6`. The link is `inline-flex` with `align-items: center`, so the caret
+centres itself against the label; the margin is what separates the two.
+
 ### Search lightbox
 `a[data-open="#search-lightbox"]` moves `#search-lightbox` into a full-screen
-`.search-lightbox-overlay` (`rgba(0,0,0,.85)`), focuses the field, and closes on
-backdrop click or <kbd>Esc</kbd>.
+`.search-lightbox-overlay`, focuses the field, and closes on backdrop click,
+the × or <kbd>Esc</kbd>. Backdrop `#0b0b0b` at `opacity: .6`; the content column
+drops in from `-30px`. Full measurements in `BEHAVIORS.md`.
 
 ## Responsive
 - **≥850px:** full nav, `.show-for-medium` hidden
 - **550–849px:** nav replaced by the hamburger; header 70px
 - **≤549px:** logo 112px; `VI | EN` restyled by the site layer (`15px`, red pipe)
+
+> `.logo-left .flex-right` carries a `min-width: 200px`, so the mobile nav list
+> must be given `width: 100%` — otherwise it shrink-wraps and the hamburger
+> floats 119px short of the container's right edge.

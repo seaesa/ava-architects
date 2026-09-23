@@ -1133,39 +1133,93 @@ li.current-dropdown > .nav-dropdown {
 /* Prevent the page behind the tray from scrolling. */
 html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
 
-/* --- Search lightbox (desktop) -------------------------------------------- */
+/* --- Search lightbox (desktop) --------------------------------------------
+   Measured on the original: a #0b0b0b backdrop at 60%, the panel dropping in
+   from -30px, and a 600px pill sitting in a 1380px content column.          */
 
 .search-lightbox-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1050;
+  z-index: 1043;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, .85);
+  padding: 0 30px;
   opacity: 0;
   visibility: hidden;
   transition: opacity .25s, visibility .25s;
 }
+.search-lightbox-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #0b0b0b;
+  opacity: .6;
+}
 .search-lightbox-overlay.is-open { opacity: 1; visibility: visible; }
-.search-lightbox-overlay .searchform-wrapper { width: 100%; max-width: 600px; }
-.search-lightbox-overlay .search-field {
+
+.search-lightbox-inner {
+  position: relative;
   width: 100%;
-  height: 56px;
-  padding: 0 18px;
-  font-size: 1.2em;
-  border: 0;
+  max-width: 1380px;
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: transform .5s, opacity .3s;
+}
+.search-lightbox-overlay.is-open .search-lightbox-inner { opacity: 1; transform: translateY(0); }
+
+#search-lightbox {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.5em;
+  color: var(--ava-light);
+  text-align: center;
+}
+#search-lightbox .searchform-wrapper { width: 100%; margin: 0; }
+#search-lightbox .search-field {
+  width: 100%;
+  margin: 0;
+  padding: 0 .75em;
+  border: 1px solid rgba(255, 255, 255, .09);
   border-radius: 99px;
-  background: rgba(255, 255, 255, .12);
-  color: #fff;
+  background-color: rgba(255, 255, 255, .2);
+  box-shadow: none;
+  color: var(--ava-light);
 }
-.search-lightbox-overlay .search-field::placeholder { color: rgba(255, 255, 255, .55); }
-.search-lightbox-overlay .ux-search-submit {
-  min-height: 56px; min-width: 56px;
-  border-radius: 99px; border: 0;
-  background: var(--ava-primary); color: #fff;
+#search-lightbox .search-field::placeholder { color: rgba(255, 255, 255, .6); }
+#search-lightbox .ux-search-submit {
+  min-width: 2.5em;
+  min-height: 2.5em;
+  margin: 0;
+  padding: 0 .6em;
+  border: 1px solid transparent;
+  border-radius: 99px;
+  background-color: transparent;
+  color: var(--ava-light);
 }
+
+.search-lightbox-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 40px;
+  line-height: 40px;
+  color: var(--ava-light);
+  opacity: .6;
+  cursor: pointer;
+  transition: opacity .3s;
+}
+.search-lightbox-close:hover { opacity: 1; }
 
 /* EN is inert in this clone (Vietnamese pages only). */
 .html_topbar_left a.lang-en { cursor: default; }
@@ -1395,6 +1449,9 @@ html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
   padding-left: 15px;
   font-size: .8em;
 }
+/* Icons in a section title are dimmed; the arrow flips its margin to the
+   trailing side. The glyph itself is replaced by an image in the site layer. */
+.section-title i { margin-right: .5em; opacity: .6; }
 .section-title i.icon-angle-right { margin-left: 10px; margin-right: 0; }
 .section-title span { text-transform: uppercase; }
 
@@ -1581,22 +1638,17 @@ img.back-image {
 .banner-link { position: absolute; inset: 0; z-index: 4; }
 .dark .banner a { color: #fff; }
 
-/* Banner headings run far larger than in body copy. */
+/* Banner headings run far larger than in body copy — but only h1 and h2 are
+   resized and bolded; h3 keeps its normal scale and a regular weight. */
 .banner h1, .banner h2, .banner h3 {
   margin: .2em 0;
   padding: 0;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1;
 }
-.banner h1 { font-size: 3.5em; }
-.banner h2 { font-size: 2.9em; }
-.banner h3 { font-size: 2em; }
+.banner h1 { font-size: 3.5em; font-weight: 700; }
+.banner h2 { font-size: 2.9em; font-weight: 700; }
 .banner h2.entry-title { font-size: 2em; }
-
-@media screen and (max-width: 549px) {
-  .banner h1 { font-size: 2.2em; }
-  .banner h2 { font-size: 1.9em; }
-}
 
 .text-box { max-height: 100%; }
 .text-box .text-box-content { position: relative; z-index: 10; backface-visibility: hidden; }
@@ -2565,6 +2617,12 @@ label { display: block; margin-bottom: .4em; font-size: .9em; }
 input[type="file"] { border: 0; box-shadow: none; padding-left: 0; }
 input[type="checkbox"], input[type="radio"] { width: auto; height: auto; margin-right: .4em; box-shadow: none; }
 
+/* In a flat search box the submit is pulled back over the field's right end,
+   so the two read as a single pill. */
+.flex-row.form-flat .flex-col,
+.form-flat .flex-row .flex-col { padding-right: 4px; }
+.searchform-wrapper.form-flat .flex-col:last-of-type { margin-left: -2.9em; }
+
 /* Pill-shaped variant used inside dark panels. */
 .form-flat input:not([type="submit"]),
 .form-flat select,
@@ -2811,18 +2869,65 @@ input[type="checkbox"], input[type="radio"] { width: auto; height: auto; margin-
 /* A `.text` block is the builder's generic rich-text wrapper. */
 .text > *:last-child { margin-bottom: 0; }
 
-/* Reveal-on-scroll, applied by main.js */
-[data-animate] { opacity: 0; will-change: transform, opacity; }
-[data-animate].is-animated { opacity: 1; animation-duration: .8s; animation-fill-mode: both; }
-[data-animate="fadeInLeft"].is-animated  { animation-name: ava-fade-in-left; }
-[data-animate="fadeInRight"].is-animated { animation-name: ava-fade-in-right; }
-[data-animate="fadeInUp"].is-animated    { animation-name: ava-fade-in-up; }
-[data-animate="fadeIn"].is-animated      { animation-name: ava-fade-in; }
+/* --- Reveal on scroll -----------------------------------------------------
+   A faithful port of the original's model, which is transition-based rather
+   than keyframe-based, and is gated by two attributes:
 
-@keyframes ava-fade-in       { from { opacity: 0; } to { opacity: 1; } }
-@keyframes ava-fade-in-left  { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: none; } }
-@keyframes ava-fade-in-right { from { opacity: 0; transform: translateX(40px); }  to { opacity: 1; transform: none; } }
-@keyframes ava-fade-in-up    { from { opacity: 0; transform: translateY(40px); }  to { opacity: 1; transform: none; } }
+     data-animate            the direction the element starts offset in
+     data-animate-transform  opt-in to actually moving
+     data-animate-transition opt-in to actually easing
+
+   Page sections carry only `data-animate`, so they are reset to
+   `transform: none; transition: none` and simply appear when revealed. Only
+   slider layers get the movement — main.js adds the two opt-in attributes to
+   those, exactly as the original's script does.
+
+   The reveal itself is `data-animated="true"`.                              */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-animate],
+  .slider [data-animate] {
+    opacity: 0 !important;
+    transition: filter 1.3s, transform 1.6s, opacity .7s ease-in;
+    animation-fill-mode: forwards;
+    backface-visibility: hidden;
+    will-change: filter, transform, opacity;
+  }
+
+  /* Without the opt-in attributes there is no movement and no easing. */
+  [data-animate]:not([data-animate-transform]) { transform: none !important; }
+  [data-animate]:not([data-animate-transition]) { transition: none !important; }
+
+  [data-animate="fadeInLeft"]   { transform: translate3d(-70px, 0, 0); }
+  [data-animate="fadeInRight"]  { transform: translate3d(70px, 0, 0); }
+  [data-animate="fadeInUp"]     { transform: translate3d(0, 70px, 0); }
+  [data-animate="fadeInDown"]   { transform: translate3d(0, -70px, 0); }
+  [data-animate="bounceInLeft"] { transform: translate3d(-300px, 0, 0); }
+  [data-animate="bounceInRight"]{ transform: translate3d(300px, 0, 0); }
+  [data-animate="bounceInUp"]   { transform: translate3d(0, 70px, 0); }
+  [data-animate="bounceInDown"] { transform: translate3d(0, -70px, 0); }
+  [data-animate="bounceIn"]     { transform: scale(1.3); }
+  [data-animate="blurIn"]       { filter: blur(15px); }
+  [data-animate="flipInY"] { backface-visibility: visible; transform: perspective(400px) rotateY(-90deg) translate3d(15px, 0, 0); }
+  [data-animate="flipInX"] { backface-visibility: visible; transform: perspective(400px) rotateX(90deg) translate3d(0, -15px, 0); }
+  [data-animate="none"] { opacity: 1 !important; }
+
+  [data-animated="true"],
+  .slider .is-selected [data-animated="true"],
+  .row-slider.slider [data-animated="true"] {
+    opacity: 1 !important;
+    transform: translateZ(0) scale(1);
+    animation-delay: .1s;
+  }
+  [data-animate="blurIn"][data-animated="true"] { filter: blur(0); }
+  [data-animated="false"] { transition: none !important; }
+
+  /* Layers on a slide that is not showing settle faster. */
+  .flickity-slider > :not(.is-selected) [data-animated="true"] {
+    transition: transform .7s, opacity .3s !important;
+  }
+  .has-shadow [data-animate], [data-animate]:hover { transition-delay: 0s !important; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -2831,7 +2936,7 @@ input[type="checkbox"], input[type="radio"] { width: auto; height: auto; margin-
     transition-duration: .01ms !important;
     scroll-behavior: auto !important;
   }
-  [data-animate] { opacity: 1; }
+  [data-animate] { opacity: 1 !important; transform: none !important; }
 }
 
 /* Printing: drop the chrome, keep the content. */

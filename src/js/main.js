@@ -267,27 +267,48 @@
     const trigger = $('a[data-open="#search-lightbox"]');
     if (!source || !trigger) return;
 
+    // Rebuild the original's chrome: a dimmed backdrop, a centred content
+    // column that drops in, and a close control at its top right.
     const overlay = document.createElement('div');
     overlay.className = 'search-lightbox-overlay';
     overlay.setAttribute('aria-hidden', 'true');
+
+    const inner = document.createElement('div');
+    inner.className = 'search-lightbox-inner';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'search-lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Đóng tìm kiếm');
+    closeBtn.innerHTML = '&times;';
+
     source.classList.remove('mfp-hide');
-    overlay.appendChild(source);
+    inner.appendChild(closeBtn);
+    inner.appendChild(source);
+    overlay.appendChild(inner);
     document.body.appendChild(overlay);
+
+    let lastFocus = null;
 
     const open = (e) => {
       e.preventDefault();
+      lastFocus = document.activeElement;
       overlay.classList.add('is-open');
       overlay.setAttribute('aria-hidden', 'false');
       const field = $('input.search-field', overlay);
       if (field) field.focus();
     };
+
     const close = () => {
+      if (!overlay.classList.contains('is-open')) return;
       overlay.classList.remove('is-open');
       overlay.setAttribute('aria-hidden', 'true');
+      if (lastFocus) lastFocus.focus();
     };
 
     on(trigger, 'click', open);
-    on(overlay, 'click', (e) => { if (e.target === overlay) close(); });
+    on(closeBtn, 'click', close);
+    on(overlay, 'click', (e) => { if (!inner.contains(e.target)) close(); });
     on(document, 'keydown', (e) => { if (e.key === 'Escape') close(); });
   }
 
@@ -416,7 +437,9 @@
       if (this.opts.cellAlign === 'center') {
         x -= (this.viewWidth - (this.widths[i] || 0)) / 2;
       }
-      if (this.opts.contain !== false) {
+      // Flickity ignores `contain` when the track wraps, and so do we —
+      // clamping a wrapped slider strands it at a partial offset.
+      if (this.opts.contain !== false && !this.wrap) {
         const max = Math.max(0, this.trackWidth - this.viewWidth);
         x = Math.min(Math.max(x, 0), max);
       }
@@ -590,25 +613,52 @@
     const items = $$('[data-animate]');
     if (!items.length) return;
 
-    if (!('IntersectionObserver' in window) || prefersReducedMotion()) {
-      items.forEach((el) => el.classList.add('is-animated'));
-      return;
-    }
+    // The theme stages three attributes rather than flipping one class, and the
+    // order matters: the element first jumps to its start offset with no
+    // transition, the transition is armed a frame later, and only then does it
+    // ease to rest. Timings measured on the original:
+    //   transform  →  +17ms  transition  →  +300ms  animated
+    const ARM_DELAY = 300;
 
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-animated');
-        io.unobserve(entry.target);
+    const settle = (el) => {
+      el.setAttribute('data-animate-transform', 'true');
+      el.setAttribute('data-animate-transition', 'true');
+      el.setAttribute('data-animated', 'true');
+    };
+
+    if (prefersReducedMotion()) { items.forEach(settle); return; }
+
+    const reveal = (el) => {
+      el.setAttribute('data-animate-transform', 'true');
+      requestAnimationFrame(() => {
+        el.setAttribute('data-animate-transition', 'true');
+        setTimeout(() => el.setAttribute('data-animated', 'true'), ARM_DELAY);
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+    };
 
-    items.forEach((el) => {
-      // Layers inside a carousel sit off to the side of the viewport and would
-      // never intersect, so they are revealed up front rather than never.
-      if (el.closest('.flickity-slider')) { el.classList.add('is-animated'); return; }
-      io.observe(el);
+    // Measured trigger: the element's top crossing into the viewport. Carousel
+    // layers share their slide's vertical position, so the same test reaches
+    // them; the stylesheet keeps the off-screen slides' layers hidden.
+    const pending = items.slice();
+
+    const check = rafThrottle(() => {
+      const limit = window.innerHeight;
+      for (let i = pending.length - 1; i >= 0; i--) {
+        const el = pending[i];
+        if (el.getBoundingClientRect().top < limit) {
+          reveal(el);
+          pending.splice(i, 1);
+        }
+      }
+      if (!pending.length) {
+        window.removeEventListener('scroll', check);
+        window.removeEventListener('resize', check);
+      }
     });
+
+    on(window, 'scroll', check, { passive: true });
+    on(window, 'resize', check);
+    check();
   }
 
   /* -- 9. portfolio filtering ---------------------------------------------- */
@@ -644,17 +694,20 @@
     overlay.className = 'ava-lightbox';
     overlay.setAttribute('aria-hidden', 'true');
     overlay.innerHTML =
-      '<button type="button" class="ava-lightbox__close" aria-label="Đóng">&times;</button>' +
-      '<img class="ava-lightbox__img" alt="">';
+      '<button type="button" class="ava-lightbox__close" aria-label="Đóng">&times;</button>';
     document.body.appendChild(overlay);
 
-    const img = $('.ava-lightbox__img', overlay);
+    // Created on first use so the page never carries a src-less <img>.
+    const img = document.createElement('img');
+    img.className = 'ava-lightbox__img';
+    img.alt = '';
     const close = () => { overlay.classList.remove('is-open'); overlay.setAttribute('aria-hidden', 'true'); };
 
     links.forEach((a) => on(a, 'click', (e) => {
       e.preventDefault();
       img.src = a.href;
       img.alt = (a.querySelector('img') || {}).alt || '';
+      if (!img.isConnected) overlay.appendChild(img);
       overlay.classList.add('is-open');
       overlay.setAttribute('aria-hidden', 'false');
     }));

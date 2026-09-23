@@ -42,8 +42,19 @@ the clone was reverse-engineered in four stages:
    (`build/layout.mjs`), rewrite every URL to a relative local path, and
    concatenate `src/css/*.css` into the stylesheet.
 
-`build/verify.mjs` then walks all 299 output files and checks that every
-`href`/`src` resolves on disk.
+Three checks guard the result, all runnable any time:
+
+```bash
+npm run verify   # every href/src in all 300 pages resolves on disk
+npm run audit    # markup invariants hold on every page; reports each fix's reach
+npm run qa       # drives 12 pages in a real browser, desktop + mobile
+```
+
+`qa` asserts the rebuilt behaviours against measured values — reveal timing,
+caret metrics, banner heading size, the arrow image on section links, slider
+snapping, the search lightbox geometry, and the whole off-canvas menu sequence
+(open → slide sub-level → back → close). It currently reports
+**218 passed, 0 failed across 20 page runs**.
 
 ### The stylesheet
 
