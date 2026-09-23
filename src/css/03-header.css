@@ -173,6 +173,10 @@
 
 .nav-uppercase > li > a { text-transform: uppercase; letter-spacing: .02em; font-weight: bolder; }
 
+/* Buttons in a nav row must not carry the global 1em bottom margin, or the
+   off-canvas rows grow past their 51.47px. */
+.nav > li > a.button, .nav > li > button { margin-bottom: 0; }
+
 /* Language switcher + search live in an `li.html` which needs no padding. */
 .nav > li.html > a { padding-top: 0; padding-bottom: 0; }
 .nav > li.html { font-size: .9em; }
@@ -380,6 +384,7 @@ li.current-dropdown > .nav-dropdown {
 /* Chevron that opens a sub-level. */
 .nav-sidebar li > button.toggle {
   width: 45px;
+  margin: 0;
   padding: 0;
   opacity: .6;
   color: inherit;

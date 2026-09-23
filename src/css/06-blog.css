@@ -227,16 +227,12 @@ h1.entry-title.mb { margin-bottom: 30px; }
 }
 
 .box-blog-post .box-image { overflow: hidden; }
-.box-blog-post .box-image img {
-  width: 100%;
-  object-fit: cover;
-  transition: filter .6s, opacity .6s, transform .6s, box-shadow .3s;
-}
-.box-blog-post:hover .box-image img { transform: scale(1.04); }
+.box-blog-post .box-image img { width: 100%; object-fit: cover; }
 
+/* No zoom and no plate here — the grey card background comes from the site
+   layer's `.row-box-shadow-1 .col-inner .box-blog-post` rule. */
 .box-blog-post .box-text {
   padding: 10.08px 17.28px 20.16px;
-  background-color: #f4f4f4;
   font-size: .9em;
   line-height: 1.6;
   text-align: left;
@@ -295,6 +291,7 @@ h1.entry-title.mb { margin-bottom: 30px; }
 .widget > ul > li > a { display: inline-block; flex: 1 1 0; padding: 6px 0; }
 .widget > ul > li + li { border-top: 1px solid var(--ava-border); }
 .widget-title, span.widget-title { font-size: 1em; font-weight: 600; }
+.widget .toggle { width: 1em; min-height: 1em; margin: 0 0 0 5px; }
 
 .searchform-wrapper .flex-row { display: flex; align-items: stretch; }
 .search-field {

@@ -72,7 +72,7 @@
   box-sizing: border-box;
   max-width: 100%;
   min-height: 2.5em;
-  margin: 0 1em 0 0;
+  margin: 0 1em 1em 0;
   padding: 0 1.2em;
   border: 1px solid transparent;
   border-radius: 0;
@@ -92,7 +92,17 @@
 }
 
 .button span { display: inline-block; line-height: 1.6; }
-.button i, button i { vertical-align: middle; top: -1.5px; position: relative; }
+
+i[class^="icon-"], i[class*=" icon-"] {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+.button i, button i { vertical-align: middle; top: -1.5px; }
+.button:not(.icon) > i { margin-left: -.15em; margin-right: .4em; }
+.button:not(.icon) > span + i { margin-left: .4em; margin-right: -.15em; }
 
 .button, input[type="submit"], input[type="submit"].button {
   background-color: var(--ava-primary);
@@ -278,6 +288,16 @@
 }
 .box-text.text-center { padding-left: 10px; padding-right: 10px; }
 
+.box-text p { margin-top: .1em; margin-bottom: .1em; }
+.box-text a:not(.button),
+.box-text h1, .box-text h2, .box-text h3,
+.box-text h4, .box-text h5, .box-text h6 {
+  line-height: 1.3;
+  margin-top: .1em;
+  margin-bottom: .1em;
+}
+.box-text .button { margin-top: 1em; }
+
 /* Overlay / shade variants put the caption on top of the image. */
 .box-overlay .box-text,
 .box-shade .box-text {
@@ -291,17 +311,6 @@
 }
 .box-overlay.dark .box-text,
 .box-shade.dark .box-text { text-shadow: 1px 1px 1px rgba(0, 0, 0, .5); }
-
-/* The gradient that keeps overlaid captions legible. */
-.box-shade .box-image::after,
-.box-overlay .box-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .65) 100%);
-  pointer-events: none;
-  transition: opacity .3s;
-}
 
 .box-text-middle.box-overlay .box-text,
 .box-text-middle.box-shade .box-text {
@@ -325,12 +334,35 @@
 .has-shadow .box:not(.box-overlay):not(.box-shade),
 .has-shadow.box:not(.box-overlay):not(.box-shade) { background-color: #fff; }
 
-.box-shadow-1, .row-box-shadow-1 > .col > .col-inner { box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
-.box-shadow-2, .row-box-shadow-2 > .col > .col-inner { box-shadow: 0 3px 8px rgba(0, 0, 0, .1); }
-.row-box-shadow-1-hover > .col > .col-inner,
-.row-box-shadow-2-hover > .col > .col-inner { transition: box-shadow .3s; }
-.row-box-shadow-1-hover > .col:hover > .col-inner { box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
-.row-box-shadow-2-hover > .col:hover > .col-inner { box-shadow: 0 3px 8px rgba(0, 0, 0, .15); }
+/* Flatsome's elevation scale, measured. Each level has a static class, a
+   `-hover` class that applies it on hover, and row variants. */
+.box-shadow-1, .box-shadow-1-hover:hover,
+.row-box-shadow-1 .col-inner, .row-box-shadow-1-hover .col-inner:hover {
+  box-shadow: 0 1px 3px -2px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
+}
+.box-shadow, .box-shadow-2, .box-shadow-2-hover:hover,
+.row-box-shadow-2 .col-inner, .row-box-shadow-2-hover .col-inner:hover {
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .16), 0 3px 6px rgba(0, 0, 0, .23);
+}
+.box-shadow-3, .box-shadow-3-hover:hover,
+.row-box-shadow-3 .col-inner, .row-box-shadow-3-hover .col-inner:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .19), 0 6px 6px rgba(0, 0, 0, .22);
+}
+.box-shadow-4, .box-shadow-4-hover:hover,
+.row-box-shadow-4 .col-inner, .row-box-shadow-4-hover .col-inner:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, .25), 0 10px 10px rgba(0, 0, 0, .1);
+}
+.box-shadow-5, .box-shadow-5-hover:hover,
+.row-box-shadow-5 .col-inner, .row-box-shadow-5-hover .col-inner:hover {
+  box-shadow: 0 30px 40px 0 rgba(0, 0, 0, .2);
+}
+.box-shadow-4-hover:hover, .box-shadow-5-hover:hover,
+.row-box-shadow-4-hover .col-inner:hover, .row-box-shadow-5-hover .col-inner:hover {
+  transform: translateY(-6px);
+}
+.row-box-shadow-1-hover .col-inner,
+.row-box-shadow-2-hover .col-inner,
+.box-shadow-1-hover, .box-shadow-2-hover { transition: box-shadow .3s, transform .3s; }
 
 /* `.hide` layers are revealed on hover (child-theme behaviour). */
 .box-text, .box-text:hover,
@@ -367,8 +399,15 @@ img.back-image {
 
 .img { position: relative; }
 .img-inner { position: relative; overflow: hidden; }
-.image-zoom img, .bg-zoom .bg { transition: transform .6s ease; }
-.image-zoom:hover img, .bg-zoom:hover .bg { transform: scale(1.06); }
+
+/* Every image inside a hoverable box shares one transition; only `image-zoom`
+   and `bg-zoom` actually scale, and they scale to 1.1. */
+.has-hover .bg,
+.has-hover [class*="image-"] img {
+  transition: filter .6s, opacity .6s, transform .6s, box-shadow .3s;
+}
+.bg-zoom:hover .bg,
+.has-hover:hover .image-zoom img { transform: scale(1.1); }
 
 .overlay {
   position: absolute;
@@ -378,8 +417,20 @@ img.back-image {
   pointer-events: none;
   transition: transform .3s, opacity .6s;
 }
-.image-overlay-add .overlay { opacity: 0; }
-.image-overlay-add:hover .overlay { opacity: 1; }
+/* `image-overlay-add` fades its tint in on hover, `-remove` fades it out; the
+   hover lives on the box (`.has-hover`), not on the image wrapper. */
+.has-hover:not(:hover) .image-overlay-add .overlay,
+.has-hover:hover .image-overlay-remove .overlay,
+.bg-overlay-add:not(:hover) .overlay,
+.bg-overlay-remove:hover .overlay { opacity: 0; }
+
+.has-hover:not(:hover) .image-overlay-add-50 .overlay,
+.has-hover:hover .image-overlay-remove-50 .overlay,
+.bg-overlay-add-50:not(:hover) .overlay,
+.bg-overlay-remove-50:hover .overlay { opacity: .5; }
+
+.box:hover .shade { opacity: .5; }
+.box-overlay:hover .image-cover img { transform: scale(1.1); }
 
 .overlay-icon {
   width: 3em; height: 3em;
@@ -407,7 +458,8 @@ img.back-image {
 .banner-bg { overflow: hidden; }
 .banner-layers { position: relative; height: 100%; max-height: 100%; }
 .banner-layers > * { position: absolute !important; }
-.banner-link { position: absolute; inset: 0; z-index: 4; }
+/* No z-index: the text layers (z-index 10) must stay clickable above it. */
+.banner-link { position: absolute; inset: 0; }
 .dark .banner a { color: #fff; }
 
 /* Banner headings run far larger than in body copy — but only h1 and h2 are
@@ -464,10 +516,8 @@ img.back-image {
   border: 1px solid rgba(0, 0, 0, .12);
   background: transparent;
   color: inherit;
-  opacity: .75;
   transition: opacity .3s, background .3s, color .3s;
 }
-.social-icons a:hover { opacity: 1; }
 .share-row { margin-top: 10px; }
 
 /* --- Floating social rail + back to top ----------------------------------- */

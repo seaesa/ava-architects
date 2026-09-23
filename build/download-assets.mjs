@@ -47,6 +47,11 @@ const CHROME = [
   `${ORIGIN}/wp-content/uploads/2024/12/ic1.png`,
   `${ORIGIN}/wp-content/uploads/2024/12/ic2.png`,
   `${ORIGIN}/wp-content/uploads/2025/01/tick.png`,
+  // Favicon set.
+  `${ORIGIN}/wp-content/uploads/2025/04/cropped-logo-ava-architects-iconic-3-32x32.png`,
+  `${ORIGIN}/wp-content/uploads/2025/04/cropped-logo-ava-architects-iconic-3-192x192.png`,
+  `${ORIGIN}/wp-content/uploads/2025/04/cropped-logo-ava-architects-iconic-3-180x180.png`,
+  `${ORIGIN}/wp-content/uploads/2025/04/cropped-logo-ava-architects-iconic-3-270x270.png`,
 ];
 
 const FONTS = [

@@ -107,19 +107,19 @@ h1, h2, h3, h4, h5, h6, .heading-font {
   font-weight: 700;
   color: #000;
   margin: 0 0 .5em;
+  width: 100%;
   letter-spacing: .01em;
   text-rendering: optimizeLegibility;
 }
 
-h1 { font-size: 1.7em; line-height: 1.3; }
-h2 { font-size: 1.6em; line-height: 1.3; }
-h3 { font-size: 1.25em; line-height: 1.3; }
-h4 { font-size: 1.125em; line-height: 1.3; }
-h5 { font-size: 1em; line-height: 1.3; }
-h6 { font-size: .85em; line-height: 1.3; opacity: .8; letter-spacing: .05em; text-transform: uppercase; }
+.h1, h1 { font-size: 1.7em; line-height: 1.3; }
+.h2, h2 { font-size: 1.6em; line-height: 1.3; }
+.h3, h3 { font-size: 1.25em; line-height: 1.3; }
+.h4, h4 { font-size: 1.125em; line-height: 1.3; }
+.h5, h5 { font-size: 1em; line-height: 1.3; }
+.h6, h6 { font-size: .85em; line-height: 1.05; opacity: .8; letter-spacing: .05em; text-transform: uppercase; }
 
 p { margin: 0 0 1.3em; }
-p:last-child { margin-bottom: 0; }
 
 a {
   color: var(--ava-ink);
@@ -769,6 +769,10 @@ hr { border: 0; border-top: 1px solid var(--ava-border); margin: 1.5em 0; }
 
 .nav-uppercase > li > a { text-transform: uppercase; letter-spacing: .02em; font-weight: bolder; }
 
+/* Buttons in a nav row must not carry the global 1em bottom margin, or the
+   off-canvas rows grow past their 51.47px. */
+.nav > li > a.button, .nav > li > button { margin-bottom: 0; }
+
 /* Language switcher + search live in an `li.html` which needs no padding. */
 .nav > li.html > a { padding-top: 0; padding-bottom: 0; }
 .nav > li.html { font-size: .9em; }
@@ -976,6 +980,7 @@ li.current-dropdown > .nav-dropdown {
 /* Chevron that opens a sub-level. */
 .nav-sidebar li > button.toggle {
   width: 45px;
+  margin: 0;
   padding: 0;
   opacity: .6;
   color: inherit;
@@ -1300,7 +1305,7 @@ html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
   box-sizing: border-box;
   max-width: 100%;
   min-height: 2.5em;
-  margin: 0 1em 0 0;
+  margin: 0 1em 1em 0;
   padding: 0 1.2em;
   border: 1px solid transparent;
   border-radius: 0;
@@ -1320,7 +1325,17 @@ html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
 }
 
 .button span { display: inline-block; line-height: 1.6; }
-.button i, button i { vertical-align: middle; top: -1.5px; position: relative; }
+
+i[class^="icon-"], i[class*=" icon-"] {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+.button i, button i { vertical-align: middle; top: -1.5px; }
+.button:not(.icon) > i { margin-left: -.15em; margin-right: .4em; }
+.button:not(.icon) > span + i { margin-left: .4em; margin-right: -.15em; }
 
 .button, input[type="submit"], input[type="submit"].button {
   background-color: var(--ava-primary);
@@ -1506,6 +1521,16 @@ html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
 }
 .box-text.text-center { padding-left: 10px; padding-right: 10px; }
 
+.box-text p { margin-top: .1em; margin-bottom: .1em; }
+.box-text a:not(.button),
+.box-text h1, .box-text h2, .box-text h3,
+.box-text h4, .box-text h5, .box-text h6 {
+  line-height: 1.3;
+  margin-top: .1em;
+  margin-bottom: .1em;
+}
+.box-text .button { margin-top: 1em; }
+
 /* Overlay / shade variants put the caption on top of the image. */
 .box-overlay .box-text,
 .box-shade .box-text {
@@ -1519,17 +1544,6 @@ html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
 }
 .box-overlay.dark .box-text,
 .box-shade.dark .box-text { text-shadow: 1px 1px 1px rgba(0, 0, 0, .5); }
-
-/* The gradient that keeps overlaid captions legible. */
-.box-shade .box-image::after,
-.box-overlay .box-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .65) 100%);
-  pointer-events: none;
-  transition: opacity .3s;
-}
 
 .box-text-middle.box-overlay .box-text,
 .box-text-middle.box-shade .box-text {
@@ -1553,12 +1567,35 @@ html.has-off-canvas, html.has-off-canvas body { overflow: hidden; }
 .has-shadow .box:not(.box-overlay):not(.box-shade),
 .has-shadow.box:not(.box-overlay):not(.box-shade) { background-color: #fff; }
 
-.box-shadow-1, .row-box-shadow-1 > .col > .col-inner { box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
-.box-shadow-2, .row-box-shadow-2 > .col > .col-inner { box-shadow: 0 3px 8px rgba(0, 0, 0, .1); }
-.row-box-shadow-1-hover > .col > .col-inner,
-.row-box-shadow-2-hover > .col > .col-inner { transition: box-shadow .3s; }
-.row-box-shadow-1-hover > .col:hover > .col-inner { box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
-.row-box-shadow-2-hover > .col:hover > .col-inner { box-shadow: 0 3px 8px rgba(0, 0, 0, .15); }
+/* Flatsome's elevation scale, measured. Each level has a static class, a
+   `-hover` class that applies it on hover, and row variants. */
+.box-shadow-1, .box-shadow-1-hover:hover,
+.row-box-shadow-1 .col-inner, .row-box-shadow-1-hover .col-inner:hover {
+  box-shadow: 0 1px 3px -2px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
+}
+.box-shadow, .box-shadow-2, .box-shadow-2-hover:hover,
+.row-box-shadow-2 .col-inner, .row-box-shadow-2-hover .col-inner:hover {
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .16), 0 3px 6px rgba(0, 0, 0, .23);
+}
+.box-shadow-3, .box-shadow-3-hover:hover,
+.row-box-shadow-3 .col-inner, .row-box-shadow-3-hover .col-inner:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .19), 0 6px 6px rgba(0, 0, 0, .22);
+}
+.box-shadow-4, .box-shadow-4-hover:hover,
+.row-box-shadow-4 .col-inner, .row-box-shadow-4-hover .col-inner:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, .25), 0 10px 10px rgba(0, 0, 0, .1);
+}
+.box-shadow-5, .box-shadow-5-hover:hover,
+.row-box-shadow-5 .col-inner, .row-box-shadow-5-hover .col-inner:hover {
+  box-shadow: 0 30px 40px 0 rgba(0, 0, 0, .2);
+}
+.box-shadow-4-hover:hover, .box-shadow-5-hover:hover,
+.row-box-shadow-4-hover .col-inner:hover, .row-box-shadow-5-hover .col-inner:hover {
+  transform: translateY(-6px);
+}
+.row-box-shadow-1-hover .col-inner,
+.row-box-shadow-2-hover .col-inner,
+.box-shadow-1-hover, .box-shadow-2-hover { transition: box-shadow .3s, transform .3s; }
 
 /* `.hide` layers are revealed on hover (child-theme behaviour). */
 .box-text, .box-text:hover,
@@ -1595,8 +1632,15 @@ img.back-image {
 
 .img { position: relative; }
 .img-inner { position: relative; overflow: hidden; }
-.image-zoom img, .bg-zoom .bg { transition: transform .6s ease; }
-.image-zoom:hover img, .bg-zoom:hover .bg { transform: scale(1.06); }
+
+/* Every image inside a hoverable box shares one transition; only `image-zoom`
+   and `bg-zoom` actually scale, and they scale to 1.1. */
+.has-hover .bg,
+.has-hover [class*="image-"] img {
+  transition: filter .6s, opacity .6s, transform .6s, box-shadow .3s;
+}
+.bg-zoom:hover .bg,
+.has-hover:hover .image-zoom img { transform: scale(1.1); }
 
 .overlay {
   position: absolute;
@@ -1606,8 +1650,20 @@ img.back-image {
   pointer-events: none;
   transition: transform .3s, opacity .6s;
 }
-.image-overlay-add .overlay { opacity: 0; }
-.image-overlay-add:hover .overlay { opacity: 1; }
+/* `image-overlay-add` fades its tint in on hover, `-remove` fades it out; the
+   hover lives on the box (`.has-hover`), not on the image wrapper. */
+.has-hover:not(:hover) .image-overlay-add .overlay,
+.has-hover:hover .image-overlay-remove .overlay,
+.bg-overlay-add:not(:hover) .overlay,
+.bg-overlay-remove:hover .overlay { opacity: 0; }
+
+.has-hover:not(:hover) .image-overlay-add-50 .overlay,
+.has-hover:hover .image-overlay-remove-50 .overlay,
+.bg-overlay-add-50:not(:hover) .overlay,
+.bg-overlay-remove-50:hover .overlay { opacity: .5; }
+
+.box:hover .shade { opacity: .5; }
+.box-overlay:hover .image-cover img { transform: scale(1.1); }
 
 .overlay-icon {
   width: 3em; height: 3em;
@@ -1635,7 +1691,8 @@ img.back-image {
 .banner-bg { overflow: hidden; }
 .banner-layers { position: relative; height: 100%; max-height: 100%; }
 .banner-layers > * { position: absolute !important; }
-.banner-link { position: absolute; inset: 0; z-index: 4; }
+/* No z-index: the text layers (z-index 10) must stay clickable above it. */
+.banner-link { position: absolute; inset: 0; }
 .dark .banner a { color: #fff; }
 
 /* Banner headings run far larger than in body copy — but only h1 and h2 are
@@ -1692,10 +1749,8 @@ img.back-image {
   border: 1px solid rgba(0, 0, 0, .12);
   background: transparent;
   color: inherit;
-  opacity: .75;
   transition: opacity .3s, background .3s, color .3s;
 }
-.social-icons a:hover { opacity: 1; }
 .share-row { margin-top: 10px; }
 
 /* --- Floating social rail + back to top ----------------------------------- */
@@ -2279,16 +2334,12 @@ h1.entry-title.mb { margin-bottom: 30px; }
 }
 
 .box-blog-post .box-image { overflow: hidden; }
-.box-blog-post .box-image img {
-  width: 100%;
-  object-fit: cover;
-  transition: filter .6s, opacity .6s, transform .6s, box-shadow .3s;
-}
-.box-blog-post:hover .box-image img { transform: scale(1.04); }
+.box-blog-post .box-image img { width: 100%; object-fit: cover; }
 
+/* No zoom and no plate here — the grey card background comes from the site
+   layer's `.row-box-shadow-1 .col-inner .box-blog-post` rule. */
 .box-blog-post .box-text {
   padding: 10.08px 17.28px 20.16px;
-  background-color: #f4f4f4;
   font-size: .9em;
   line-height: 1.6;
   text-align: left;
@@ -2347,6 +2398,7 @@ h1.entry-title.mb { margin-bottom: 30px; }
 .widget > ul > li > a { display: inline-block; flex: 1 1 0; padding: 6px 0; }
 .widget > ul > li + li { border-top: 1px solid var(--ava-border); }
 .widget-title, span.widget-title { font-size: 1em; font-weight: 600; }
+.widget .toggle { width: 1em; min-height: 1em; margin: 0 0 0 5px; }
 
 .searchform-wrapper .flex-row { display: flex; align-items: stretch; }
 .search-field {
@@ -2453,9 +2505,7 @@ h1.entry-title.mb { margin-bottom: 30px; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: filter .6s, opacity .6s, transform .6s, box-shadow .3s;
 }
-.portfolio-box:hover .box-image img { transform: scale(1.06); }
 
 /* The dark wash that keeps the caption readable over any photo. */
 .shade {
@@ -2485,19 +2535,9 @@ h1.entry-title.mb { margin-bottom: 30px; }
 .portfolio-box .box-text-inner { transition: .5s ease-out; }
 .portfolio-box .box-text a { color: inherit; }
 
-/* Project name */
-.portfolio-box .box-text p.uppercase,
-.portfolio-box .box-text .portfolio-box-title {
-  margin: .1em 0 15px;
-  font-size: 1.11em;             /* 16px */
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  color: #fff;
-}
-/* Category eyebrow above the name */
-.portfolio-box .box-text .portfolio-box-cat { font-size: .8em; opacity: .85; text-transform: uppercase; }
+/* The caption's own type (eyebrow + project name) is set by the site layer in
+   11-site-custom.css; only the eyebrow's leading is left to set here. */
+.portfolio-box .box-text .portfolio-box-category { line-height: 1.2; }
 
 /* Filter bar on /du-an/ */
 .portfolio-filter,
@@ -2559,7 +2599,6 @@ h1.entry-title.mb { margin-bottom: 30px; }
 .portfolio-inner .icon-box-text p { margin: 0; }
 .last-reset > *:last-child { margin-bottom: 0; }
 
-.location-ic, .other-ic { display: inline-block; }
 
 /* --- Related projects -------------------------------------------------------- */
 
@@ -2701,7 +2740,6 @@ input[type="checkbox"], input[type="radio"] { width: auto; height: auto; margin-
 
 #footer .text.fz-16, .fz-16 { font-size: 1em; }
 #footer .text.fz-16 p { margin: 0 0 20.8px; line-height: 2; }
-#footer .text.fz-16 p:last-child { margin-bottom: 0; }
 
 /* The vertical lock-up logo. */
 .footer-customize .img-inner img { width: 100%; height: auto; }
@@ -2713,15 +2751,17 @@ input[type="checkbox"], input[type="radio"] { width: auto; height: auto; margin-
 .ux-menu-link { display: flex; }
 .ux-menu-link__link {
   display: flex;
+  flex: 1 1 0;
   align-items: baseline;
   width: 100%;
-  min-height: 40px;
-  padding: 4.8px 0;
-  color: var(--ava-ink);
-  border-bottom: 0 none var(--ava-border);
+  min-height: 2.5em;
+  padding: 4.8px 0 .3em;
+  color: currentColor;
+  border-bottom: 1px solid var(--ava-border);
   transition: color .3s;
 }
-.ux-menu-link__link:hover { color: var(--ava-primary); }
+.ux-menu-link--active .ux-menu-link__link,
+.ux-menu-link:hover .ux-menu-link__link { color: rgba(18, 18, 18, .85); }
 .ux-menu-link__text { display: block; }
 .dark .ux-menu-link__link { border-bottom-color: rgba(255, 255, 255, .2); }
 .dark .ux-menu-link:hover .ux-menu-link__link { color: rgba(255, 255, 255, .85); }
@@ -2865,9 +2905,6 @@ input[type="checkbox"], input[type="radio"] { width: auto; height: auto; margin-
 
 /* Tooltips on the social buttons */
 .tooltip { position: relative; }
-
-/* A `.text` block is the builder's generic rich-text wrapper. */
-.text > *:last-child { margin-bottom: 0; }
 
 /* --- Reveal on scroll -----------------------------------------------------
    A faithful port of the original's model, which is transition-based rather
@@ -4037,4 +4074,331 @@ footer .wpcf7-form {
 
 .label-popular.menu-item > a:after {
   content:"Popular";
+}
+
+
+/* ===== 12-contact.css ===== */
+/* ==========================================================================
+   AVA Architects — 12. Contact page
+   The one page that deliberately departs from the clone. The original's layout
+   left a half-empty red panel, an uneven form grid and a full-bleed map pressed
+   against the form; this reworks the spacing while keeping the brand language.
+   Markup: build/page-lien-he.mjs
+   ========================================================================== */
+
+.contact-page {
+  --c-gap: 28px;
+  --c-radius: 4px;
+  padding: 0 0 80px;
+}
+
+/* --- Intro ---------------------------------------------------------------- */
+
+.c-hero { padding: 64px 0 44px; text-align: center; }
+
+.c-hero__eyebrow {
+  margin: 0 0 12px;
+  font-size: .8em;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ava-primary);
+}
+
+.c-hero__title {
+  margin: 0 0 20px;
+  font-family: var(--ava-font-bold);
+  font-size: 2.5em;
+  line-height: 1.15;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+/* The short rule under the title echoes the section-title bar. */
+.c-hero__title::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 4px;
+  margin: 20px auto 0;
+  background: var(--ava-primary);
+}
+
+.c-hero__lead {
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: 1.05em;
+  line-height: 1.75;
+  color: #555;
+}
+
+/* --- Two-column body ------------------------------------------------------ */
+
+.c-main { padding: 0; }
+
+.c-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  gap: var(--c-gap);
+  align-items: start;
+}
+
+/* --- Red info card -------------------------------------------------------- */
+
+.c-card {
+  padding: 40px 36px;
+  border-radius: var(--c-radius);
+  background: var(--ava-primary);
+  color: #fff;
+}
+
+.c-card__head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 24px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, .25);
+}
+/* The mark is the red iconic logo, so knock it out to white on the red card. */
+.c-card__mark {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+  filter: brightness(0) invert(1);
+}
+.c-card__kicker {
+  margin: 0;
+  font-family: var(--ava-font-bold);
+  font-size: .95em;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.c-info { margin: 0; padding: 0; list-style: none; }
+.c-info__item + .c-info__item { margin-top: 22px; }
+.c-info__label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: .72em;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  opacity: .72;
+}
+.c-info__value { display: block; font-size: 1em; line-height: 1.6; }
+.c-info__value a { color: #fff; border-bottom: 1px solid rgba(255, 255, 255, .4); }
+.c-info__value a:hover { color: #fff; border-bottom-color: #fff; }
+.c-info__value em { font-style: normal; opacity: .75; }
+
+.c-card__social {
+  display: flex;
+  gap: 10px;
+  padding-top: 26px;
+  margin-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, .25);
+}
+.c-card__social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 255, 255, .45);
+  border-radius: 50%;
+  color: #fff;
+  font-size: .9em;
+  transition: background .25s, border-color .25s, color .25s;
+}
+.c-card__social a:hover { background: #fff; border-color: #fff; color: var(--ava-primary); }
+
+/* --- Form ----------------------------------------------------------------- */
+
+.c-formwrap {
+  padding: 40px 40px 32px;
+  border: 1px solid #ececec;
+  border-radius: var(--c-radius);
+  background: #fff;
+}
+
+.c-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 24px;
+}
+.c-field--full { grid-column: 1 / -1; }
+
+.c-field__label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: .8em;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #444;
+}
+.c-hint { font-weight: 400; text-transform: none; letter-spacing: 0; color: #999; }
+.c-req { color: var(--ava-primary); }
+
+.c-field__input {
+  display: block;
+  width: 100%;
+  height: 46px;
+  margin: 0;
+  padding: 0 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: var(--c-radius);
+  background: #fff;
+  box-shadow: none;
+  font-size: 1em;
+  color: var(--ava-ink);
+  transition: border-color .2s, box-shadow .2s;
+}
+.c-field__input::placeholder { color: #aaa; }
+.c-field__input:focus {
+  outline: none;
+  border-color: var(--ava-primary);
+  box-shadow: 0 0 0 3px rgba(211, 36, 43, .12);
+}
+.c-field__input--area {
+  height: auto;
+  min-height: 132px;
+  padding: 12px 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+/* File input: the native control is hidden behind a styled row. */
+.c-file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 46px;
+  padding: 0 6px 0 6px;
+  border: 1px dashed #d0d0d0;
+  border-radius: var(--c-radius);
+  background: #fafafa;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.c-file:hover { border-color: var(--ava-primary); background: #fff; }
+.c-file__input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.c-file__btn {
+  flex: 0 0 auto;
+  padding: 7px 14px;
+  border-radius: var(--c-radius);
+  background: #1a1a1a;
+  color: #fff;
+  font-size: .8em;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.c-file__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: .9em;
+  color: #888;
+}
+.c-file__name.has-file { color: var(--ava-ink); }
+
+/* --- Submit --------------------------------------------------------------- */
+
+.c-form__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 26px;
+  margin-top: 28px;
+  border-top: 1px solid #ececec;
+}
+.c-form__note { margin: 0; font-size: .85em; color: #888; }
+
+.c-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  margin: 0;
+  padding: 0 30px;
+  border: 0;
+  border-radius: var(--c-radius);
+  background: var(--ava-primary);
+  color: #fff;
+  font-family: var(--ava-font-bold);
+  font-size: .95em;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .25s, transform .25s, box-shadow .25s;
+}
+.c-submit:hover {
+  background: #b71d23;
+  box-shadow: 0 6px 16px rgba(211, 36, 43, .3);
+  transform: translateY(-1px);
+  color: #fff;
+}
+.c-submit i { font-size: .9em; }
+
+/* The shared form handler writes its notice in here. */
+.c-form .wpcf7-response-output {
+  grid-column: 1 / -1;
+  margin: 18px 0 0;
+  padding: 12px 16px;
+  border: 1px solid #46b450;
+  border-radius: var(--c-radius);
+  background: #f4fbf4;
+  font-size: .9em;
+}
+
+/* --- Map ------------------------------------------------------------------ */
+
+.c-map { padding-top: 56px; }
+.c-map__frame {
+  position: relative;
+  height: 420px;
+  border-radius: var(--c-radius);
+  overflow: hidden;
+  box-shadow: 0 3px 16px rgba(0, 0, 0, .08);
+}
+.c-map__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* --- Responsive ----------------------------------------------------------- */
+
+@media screen and (max-width: 1099px) {
+  .c-grid { grid-template-columns: minmax(0, 300px) minmax(0, 1fr); }
+  .c-card { padding: 32px 26px; }
+  .c-formwrap { padding: 32px 28px 26px; }
+}
+
+@media screen and (max-width: 849px) {
+  .contact-page { padding-bottom: 56px; }
+  .c-hero { padding: 44px 0 32px; }
+  .c-hero__title { font-size: 2em; }
+  .c-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .c-card { padding: 30px 26px; }
+  .c-map { padding-top: 40px; }
+  .c-map__frame { height: 340px; }
+}
+
+@media screen and (max-width: 549px) {
+  .c-hero { padding: 32px 0 26px; }
+  .c-hero__title { font-size: 1.6em; }
+  .c-hero__lead { font-size: 1em; }
+  .c-form__grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .c-formwrap { padding: 26px 20px 22px; }
+  .c-card { padding: 26px 20px; }
+  .c-card__head { gap: 12px; }
+  .c-form__foot { flex-direction: column-reverse; align-items: stretch; }
+  .c-submit { justify-content: center; width: 100%; }
+  .c-form__note { text-align: center; }
+  .c-map__frame { height: 280px; }
 }

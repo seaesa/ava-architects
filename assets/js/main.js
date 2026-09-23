@@ -769,7 +769,7 @@
 
   /** The forms have no backend in this clone; say so rather than 404. */
   function initForms() {
-    $$('form.wpcf7-form, form.searchform').forEach((form) => {
+    $$('form.wpcf7-form, form.c-form, form.searchform').forEach((form) => {
       if (form.classList.contains('searchform')) return;   // search still navigates
       on(form, 'submit', (e) => {
         e.preventDefault();
@@ -781,6 +781,19 @@
         }
         form.classList.add('sent');
         out.textContent = 'Cảm ơn bạn! Đây là bản clone tĩnh nên biểu mẫu không được gửi đi.';
+      });
+    });
+  }
+
+  /** Show the chosen filename in the contact form's styled file control. */
+  function initFileInputs() {
+    $$('.c-file__input').forEach((input) => {
+      const name = $('.c-file__name', input.closest('.c-file'));
+      if (!name) return;
+      on(input, 'change', () => {
+        const file = input.files && input.files[0];
+        name.textContent = file ? file.name : name.dataset.empty;
+        name.classList.toggle('has-file', !!file);
       });
     });
   }
@@ -807,6 +820,7 @@
     initWidgetAccordions();
     initForms();
     initLanguageSwitch();
+    initFileInputs();
     document.documentElement.classList.remove('loading-site');
   }
 

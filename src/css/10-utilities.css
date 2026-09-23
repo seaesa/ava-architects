@@ -86,9 +86,6 @@
 /* Tooltips on the social buttons */
 .tooltip { position: relative; }
 
-/* A `.text` block is the builder's generic rich-text wrapper. */
-.text > *:last-child { margin-bottom: 0; }
-
 /* --- Reveal on scroll -----------------------------------------------------
    A faithful port of the original's model, which is transition-based rather
    than keyframe-based, and is gated by two attributes:

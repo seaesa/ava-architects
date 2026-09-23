@@ -37,8 +37,10 @@ function harvestInlineStyles($, $scope) {
   const css = [];
   $scope.find('style').each((_, el) => {
     const txt = $(el).html() || '';
-    // only the builder's scoped rules (#id { ... }) — never global resets
-    if (/#[\w-]+\s*(\{|[>,])/.test(txt)) css.push(txt.trim());
+    // Keep the builder's scoped rules — anything hung off an #id, including
+    // descendant selectors like `#slider-123 .flickity-slider > *`. Never
+    // global resets, which have no id at all.
+    if (/#[\w-]+\s*[{>,.:\s]/.test(txt)) css.push(txt.trim());
     $(el).remove();
   });
   return css.join('\n');

@@ -283,7 +283,10 @@ export function documentShell({ rel, slug, title, description, ogImage, bodyClas
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AVA Architects">
 ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ''}
-<link rel="icon" href="${rel}assets/img/2025/04/logo-ava-architects-6-copy@2x-1900x577.png">
+<link rel="icon" sizes="32x32" href="${rel}assets/img/2025/04/cropped-logo-ava-architects-iconic-3-32x32.png">
+<link rel="icon" sizes="192x192" href="${rel}assets/img/2025/04/cropped-logo-ava-architects-iconic-3-192x192.png">
+<link rel="apple-touch-icon" href="${rel}assets/img/2025/04/cropped-logo-ava-architects-iconic-3-180x180.png">
+<meta name="msapplication-TileImage" content="${rel}assets/img/2025/04/cropped-logo-ava-architects-iconic-3-270x270.png">
 <link rel="stylesheet" href="${rel}assets/css/style.css">
 <script>document.documentElement.className = document.documentElement.className.replace(/\\bno-js\\b/, 'js');</script>
 ${builderCss ? `<style>\n${builderCss}\n</style>` : ''}

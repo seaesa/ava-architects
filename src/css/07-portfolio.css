@@ -24,9 +24,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: filter .6s, opacity .6s, transform .6s, box-shadow .3s;
 }
-.portfolio-box:hover .box-image img { transform: scale(1.06); }
 
 /* The dark wash that keeps the caption readable over any photo. */
 .shade {
@@ -56,19 +54,9 @@
 .portfolio-box .box-text-inner { transition: .5s ease-out; }
 .portfolio-box .box-text a { color: inherit; }
 
-/* Project name */
-.portfolio-box .box-text p.uppercase,
-.portfolio-box .box-text .portfolio-box-title {
-  margin: .1em 0 15px;
-  font-size: 1.11em;             /* 16px */
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  color: #fff;
-}
-/* Category eyebrow above the name */
-.portfolio-box .box-text .portfolio-box-cat { font-size: .8em; opacity: .85; text-transform: uppercase; }
+/* The caption's own type (eyebrow + project name) is set by the site layer in
+   11-site-custom.css; only the eyebrow's leading is left to set here. */
+.portfolio-box .box-text .portfolio-box-category { line-height: 1.2; }
 
 /* Filter bar on /du-an/ */
 .portfolio-filter,
@@ -130,7 +118,6 @@
 .portfolio-inner .icon-box-text p { margin: 0; }
 .last-reset > *:last-child { margin-bottom: 0; }
 
-.location-ic, .other-ic { display: inline-block; }
 
 /* --- Related projects -------------------------------------------------------- */
 

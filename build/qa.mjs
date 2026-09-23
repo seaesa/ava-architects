@@ -85,6 +85,39 @@ for (const [label, path] of PAGES) {
   record(label, 'sliders snapped', r.slidersSnapped);
   record(label, 'no horizontal overflow', !r.overflowX);
 
+  // The contact page is hand-authored; assert its layout holds together.
+  if (path === '/lien-he/') {
+    const c = await desktop.evaluate(() => {
+      const R = n => Math.round(n);
+      const grid = document.querySelector('.c-grid');
+      const card = document.querySelector('.c-card');
+      const form = document.querySelector('.c-formwrap');
+      const map = document.querySelector('.c-map__frame iframe');
+      const fields = [...document.querySelectorAll('.c-field__input')];
+      const labels = [...document.querySelectorAll('.c-field__label')];
+      const cardR = card.getBoundingClientRect(), formR = form.getBoundingClientRect();
+      return {
+        cols: getComputedStyle(grid).gridTemplateColumns.split(' ').length,
+        gap: R(formR.left - cardR.right),
+        cardW: R(cardR.width), formW: R(formR.width),
+        fields: fields.length, labels: labels.length,
+        everyFieldLabelled: fields.every(f => !!document.querySelector(`label[for="${f.id}"]`)),
+        mapW: R(map.getBoundingClientRect().width),
+        mapH: R(map.getBoundingClientRect().height),
+        containerW: R(document.querySelector('.c-map .container').getBoundingClientRect().width),
+        cardTop: R(cardR.top), formTop: R(formR.top),
+        hasContactDetails: /29 Nguyễn Sơn Trà/.test(document.querySelector('.c-info').textContent),
+      };
+    });
+    record(label, 'contact: two columns', c.cols === 2, String(c.cols));
+    record(label, 'contact: 28px gutter', Math.abs(c.gap - 28) <= 1, String(c.gap));
+    record(label, 'contact: card + form aligned', c.cardTop === c.formTop, `${c.cardTop}/${c.formTop}`);
+    record(label, 'contact: every field labelled', c.everyFieldLabelled && c.labels >= c.fields, `${c.labels} labels / ${c.fields} fields`);
+    record(label, 'contact: map inside container', Math.abs(c.mapW - c.containerW + 30) <= 2, `${c.mapW} vs ${c.containerW}`);
+    record(label, 'contact: map 420px tall', Math.abs(c.mapH - 420) <= 1, String(c.mapH));
+    record(label, 'contact: details present', c.hasContactDetails);
+  }
+
   // Search lightbox geometry (header control exists on every page).
   const lb = await desktop.evaluate(async () => {
     const t = document.querySelector('a[data-open="#search-lightbox"]');

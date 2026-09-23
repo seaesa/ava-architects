@@ -2,6 +2,7 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { documentShell } from './layout.mjs';
+import { contactContent } from './page-lien-he.mjs';
 import { localPath } from './paths.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
@@ -98,8 +99,13 @@ function buildAssets() {
 // ---------------------------------------------------------------------------
 
 function render(page) {
-  const { meta, content, builderCss } = page;
+  const { meta, builderCss } = page;
   const rel = relFor(meta.slug);
+
+  // /lien-he/ is hand-authored rather than transformed from the source page —
+  // see build/page-lien-he.mjs for why.
+  const bespoke = meta.slug === 'lien-he';
+  const content = bespoke ? contactContent(rel) : page.content;
 
   const html = documentShell({
     rel,
@@ -108,8 +114,8 @@ function render(page) {
     description: meta.description,
     ogImage: meta.ogImage ? rewriteUrl(meta.ogImage, rel) : '',
     bodyClass: meta.bodyClass,
-    builderCss: rewriteAll(builderCss || '', rel),
-    content: rewriteAll(content, rel),
+    builderCss: bespoke ? '' : rewriteAll(builderCss || '', rel),
+    content: bespoke ? content : rewriteAll(content, rel),
   });
 
   const out = join(ROOT, outFileFor(meta.slug));

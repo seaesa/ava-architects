@@ -14,7 +14,6 @@
 
 #footer .text.fz-16, .fz-16 { font-size: 1em; }
 #footer .text.fz-16 p { margin: 0 0 20.8px; line-height: 2; }
-#footer .text.fz-16 p:last-child { margin-bottom: 0; }
 
 /* The vertical lock-up logo. */
 .footer-customize .img-inner img { width: 100%; height: auto; }
@@ -26,15 +25,17 @@
 .ux-menu-link { display: flex; }
 .ux-menu-link__link {
   display: flex;
+  flex: 1 1 0;
   align-items: baseline;
   width: 100%;
-  min-height: 40px;
-  padding: 4.8px 0;
-  color: var(--ava-ink);
-  border-bottom: 0 none var(--ava-border);
+  min-height: 2.5em;
+  padding: 4.8px 0 .3em;
+  color: currentColor;
+  border-bottom: 1px solid var(--ava-border);
   transition: color .3s;
 }
-.ux-menu-link__link:hover { color: var(--ava-primary); }
+.ux-menu-link--active .ux-menu-link__link,
+.ux-menu-link:hover .ux-menu-link__link { color: rgba(18, 18, 18, .85); }
 .ux-menu-link__text { display: block; }
 .dark .ux-menu-link__link { border-bottom-color: rgba(255, 255, 255, .2); }
 .dark .ux-menu-link:hover .ux-menu-link__link { color: rgba(255, 255, 255, .85); }
